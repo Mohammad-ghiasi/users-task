@@ -14,7 +14,7 @@ const token = Cookies.get("token");
 
 const getData = async (result: number, page: number) => {
   const { data } = await api.get(
-    `http://localhost:3001/users/users?page=${page}&limit=${result}`,
+    `/users/users?page=${page}&limit=${result}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
