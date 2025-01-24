@@ -3,6 +3,7 @@
 import Footer from "@/components/Footer";
 import Loading from "@/components/Loading";
 import UserItem from "@/components/UserItem";
+import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { useEffect, useRef, useState } from "react";
 import api from "@/utils/api";
@@ -34,18 +35,21 @@ export type User = {
 
 export default function UserPage() {
   const triggerToast = useCustomToast();
+  const router = useRouter();
   const elementRef = useRef(null);
   const [users, setUsers] = useState<User[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  let [page, setPage] = useState<number>(1);
+  let [page, setPage] = useState(0);
+  
 
   const fetchData = async (result: number) => {
     try {
       setLoading(true);
       const { users: news, pagination } = await getData(result, page);
+      console.log({ news, pagination });
 
       if (news) {
-        setPage(pagination.currentPage + 1);
+        setPage(pagination.currentPage += 1);
         setUsers((prevUsers: any) => [...(prevUsers || []), ...news]);
       }
     } catch (error) {
@@ -64,7 +68,7 @@ export default function UserPage() {
       ([entry]) => {
         if (entry.isIntersecting) {
           fetchData(10);
-          setPage(page += 1);
+          setPage(page + 1);
         }
       },
       { threshold: 0.1 }
@@ -80,6 +84,7 @@ export default function UserPage() {
       }
     };
   }, []);
+  console.log(page);
 
   // Function to delete user by ID
   const handleDeleteUser = async (userId: string) => {
