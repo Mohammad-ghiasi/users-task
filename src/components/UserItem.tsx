@@ -41,8 +41,8 @@ export default function UserItem({
             {user.lastname[0]}
           </div>
 
-          <Link href={`/users/${user._id}`}>
-            <div className="flex-grow">
+          <div className="flex-grow">
+            <Link href={`/users/${user._id}`}>
               <p className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 truncate">
                 {`${user.firstname} ${user.lastname}`}
               </p>
@@ -57,8 +57,8 @@ export default function UserItem({
               <p className="text-xs sm:text-sm md:text-base text-gray-500">
                 Joined: {new Date(user.createdAt).toLocaleDateString()}
               </p>
-            </div>
-          </Link>
+            </Link>
+          </div>
 
           <div className="flex flex-row space-x-5 mt-5 md:mt-0 md:flex-col items-center justify-center md:space-y-5 md:space-x-0">
             <button
