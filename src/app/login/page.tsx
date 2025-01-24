@@ -28,7 +28,7 @@ const LoginForm = () => {
   const onSubmit: SubmitHandler<ILoginForm> = async (data: ILoginForm) => {
     try {
       // Send login request
-      const res = await api.post("http://localhost:3001/users/login", data);
+      const res = await api.post("/users/login", data);
   
       // Check if token exists in the response
       if (res.data?.token) {
