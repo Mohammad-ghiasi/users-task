@@ -61,7 +61,7 @@ export default function UserPage() {
 
   useEffect(() => {
     fetchData(10);
-  }, [page]);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
