@@ -3,8 +3,8 @@ import { FaEnvelope, FaMapMarkerAlt, FaEdit, FaTrash } from "react-icons/fa";
 import EditModal from "@/components/EditModal";
 import api from "@/utils/api";
 import Cookies from "js-cookie";
-import { User } from "@/app/users/page";
 import Link from "next/link";
+import { User } from "@/types/myTypes";
 
 export default function UserItem({
   user,

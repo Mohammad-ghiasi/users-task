@@ -8,12 +8,9 @@ import Cookies from "js-cookie";
 import useCustomToast from "@/hooks/toast/ToastNotification ";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import { ILoginForm } from "@/types/myTypes";
 
-// Define the form data type
-interface ILoginForm {
-  email: string;
-  password: string;
-}
+
 
 const LoginForm = () => {
   const triggerToast = useCustomToast();

@@ -1,8 +1,6 @@
-import dynamic from 'next/dynamic';
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import Features from "@/components/Features";
-import Contact from "@/components/Contact";
 
 
 export default function HomePage() {

@@ -4,17 +4,9 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import api from "@/utils/api"; // Assuming you have a centralized Axios instance
 import { toast, ToastContainer } from "react-toastify";
+import { addUserProp, ISignupForm } from "@/types/myTypes";
 
-type addUserProp = {
-  redirect?: string;
-};
-interface ISignupForm {
-  email: string;
-  password: string;
-  job: string;
-  firstname: string;
-  lastname: string;
-}
+
 
 export default function AddUser({ redirect }: addUserProp) {
   const {

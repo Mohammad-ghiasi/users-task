@@ -8,9 +8,11 @@ import { useEffect, useRef, useState } from "react";
 import api from "@/utils/api";
 import { ToastContainer } from "react-toastify";
 import useCustomToast from "@/hooks/toast/ToastNotification ";
+import { User } from "@/types/myTypes";
 
-const token = Cookies.get("token");
+const token: string | undefined = Cookies.get("token");
 
+// fetcher function
 const getData = async (result: number, page: number) => {
   const { data } = await api.get(`/users/users?page=${page}&limit=${result}`, {
     headers: {
@@ -20,25 +22,19 @@ const getData = async (result: number, page: number) => {
   return data;
 };
 
-export type User = {
-  _id: string;
-  password: string;
-  job: string;
-  email: string;
-  firstname: string;
-  lastname: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-};
+
 
 export default function UserPage() {
+  //initialize custom hook
   const triggerToast = useCustomToast();
+  // ref hook for selection element for refetchnew data
   const elementRef = useRef(null);
+
   const [users, setUsers] = useState<User[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   let [page, setPage] = useState<number>(1);
 
+  // function for fetch data
   const fetchData = async (result: number) => {
     try {
       setLoading(true);
@@ -55,10 +51,12 @@ export default function UserPage() {
     }
   };
 
+  // fetch initial data
   useEffect(() => {
     fetchData(10);
   }, []);
 
+  // refetch for new data
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {

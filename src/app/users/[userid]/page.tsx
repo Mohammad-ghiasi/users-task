@@ -1,12 +1,14 @@
+import { propParams } from "@/types/myTypes";
 import api from "@/utils/api";
+import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 import { cookies } from "next/headers";
 import { FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
-type propParams = { params: { userid: string }; searchParams: {} };
+
 
 export default async function page(props: propParams) {
-  const cookieStore = cookies();
-  const token = cookieStore.get("token")?.value;
+  const cookieStore: ReadonlyRequestCookies = cookies();
+  const token: string | undefined = cookieStore.get("token")?.value;
 
 
   const { data } = await api.get(`/users/user/${props.params.userid}`, {

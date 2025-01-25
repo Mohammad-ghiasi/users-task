@@ -1,14 +1,7 @@
 import { useEffect } from "react";
-import { User } from "@/app/users/page";
 import { FaSave, FaTimes } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-
-interface EditModalProps {
-  user: User;
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (updatedUser: User) => void;
-}
+import { EditModalProps, User } from "@/types/myTypes";
 
 export default function EditModal({
   user,
