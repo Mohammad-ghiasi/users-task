@@ -1,16 +1,17 @@
-Here’s a simple README template you can use for your project:
+Here's an updated README template for your project, considering the new feature of using local storage to handle user data:
 
 ---
 
 # User Management System
 
-A user management system built using **Next.js**, **React**, and **Express.js**. This project implements features like infinite scrolling, user editing, user deletion, and a user-friendly interface for managing user information.
+A user management system built using **Next.js**, **React**, and **Express.js**. This project implements features like infinite scrolling, user editing, user deletion, and a user-friendly interface for managing user information. Additionally, the system uses **local storage** to store and manage data, ensuring that updates, deletions, and additions are reflected without needing to fetch data on every page load.
 
 ## Features
 
 - **Infinite Scrolling**: The list of users loads dynamically as the user scrolls down the page, fetching more users without reloading the entire page.
 - **User Editing**: Users can be edited directly through a modal, with updated information saved to the backend.
 - **User Deletion**: Users can be deleted from the system, and the changes are reflected immediately on the page.
+- **Local Storage**: The system leverages local storage to store user data, ensuring that even after updates, additions, or deletions, the data is preserved. On page load, the data is first fetched from local storage, and if no data exists, new data is fetched from the backend.
 - **Authentication**: Secured API routes that require an authorization token for making requests.
 
 ## Tech Stack
@@ -21,6 +22,7 @@ A user management system built using **Next.js**, **React**, and **Express.js**.
 - **API Calls**: Axios
 - **Styling**: Tailwind CSS, Chakra UI
 - **Real-Time**: WebSockets (Socket.IO)
+- **Storage**: Local Storage for persistent data
 
 ## Installation
 
@@ -74,13 +76,13 @@ All API requests are protected by **JWT** authentication. Ensure that you send t
 - **User Actions**: Each user has options to edit or delete. When the edit button is clicked, a modal opens to update user details.
 - **Modals**: The edit modal allows updating user details (like first name, last name, email, etc.) and saving them back to the backend.
 - **Toast Notifications**: Feedback is provided with toast notifications on success or failure of user actions (e.g., delete, save).
+- **Local Storage**: The user list is initially fetched from local storage. If no data is available, it falls back to the backend API to fetch the data. Updates and deletions are reflected both in the UI and stored in local storage.
 
 ## Development
 
 - To contribute to the project, create a new branch from `main`, implement your changes, and submit a pull request.
 - Follow best practices for clean, readable code, and adhere to the project's existing coding standards.
 
-
 ---
 
-Feel free to modify this template further depending on your project's exact details.
+Feel free to adjust the template further based on your specific needs!

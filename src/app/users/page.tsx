@@ -30,8 +30,16 @@ export default function UserPage() {
 
   const [users, setUsers] = useState<User[] | null>([]); // Initialize as an empty array
 
+  // Check for data in localStorage on initial load
+  useEffect(() => {
+    const storedUsers = localStorage.getItem("users");
+    if (storedUsers) {
+      setUsers(JSON.parse(storedUsers)); // Set users from localStorage if available
+    }
+  }, []);
+
   // SWR Infinite Query setup
-  const { data, error, size, setSize, isValidating, isLoading} = useSWRInfinite(
+  const { data, error, size, setSize, isValidating, isLoading } = useSWRInfinite(
     (index) => `/users/users?page=${index + 1}&limit=10`,
     fetcher,
     {
@@ -43,11 +51,14 @@ export default function UserPage() {
   // Merge users from different pages into a single array
   useEffect(() => {
     if (data) {
-      // Merge new users with the existing users state
-      setUsers((prevUsers) => [
-        ...(prevUsers || []), // Keep the previous users (or an empty array if null)
-        ...data[data.length - 1]?.users || [], // Add new users from the latest page
-      ]);
+      setUsers((prevUsers) => {
+        const mergedUsers = [
+          ...(prevUsers || []), // Keep the previous users (or an empty array if null)
+          ...data[data.length - 1]?.users || [], // Add new users from the latest page
+        ];
+        localStorage.setItem("users", JSON.stringify(mergedUsers)); // Update localStorage
+        return mergedUsers;
+      });
     }
   }, [data]);
 
@@ -83,7 +94,12 @@ export default function UserPage() {
       });
 
       // Remove user from state
-      setUsers((prevUsers: any) => prevUsers?.filter((user: User) => user._id !== userId));
+      setUsers((prevUsers: any) => {
+        const updatedUsers = prevUsers?.filter((user: User) => user._id !== userId);
+        localStorage.setItem("users", JSON.stringify(updatedUsers)); // Update localStorage
+        return updatedUsers;
+      });
+
       triggerToast({
         title: "User deleted successfully.",
         status: "success",
@@ -98,11 +114,13 @@ export default function UserPage() {
   };
 
   const handleUpdateUser = (updatedUser: User) => {
-    setUsers((prevUsers: any) =>
-      prevUsers?.map((user: User) =>
+    setUsers((prevUsers: any) => {
+      const updatedUsers = prevUsers?.map((user: User) =>
         user._id === updatedUser._id ? { ...user, ...updatedUser } : user
-      )
-    );
+      );
+      localStorage.setItem("users", JSON.stringify(updatedUsers)); // Update localStorage
+      return updatedUsers;
+    });
   };
 
   // Error handling
