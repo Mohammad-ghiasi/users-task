@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import Loading from "@/components/Loading";
 import UserItem from "@/components/UserItem";
 import Cookies from "js-cookie";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { ToastContainer } from "react-toastify";
 import useCustomToast from "@/hooks/ToastNotification ";
 import { User } from "@/types/myTypes";
@@ -17,48 +17,49 @@ const token: string | undefined = Cookies.get("token");
 // Fetcher function for SWR
 const fetcher = async (url: string) => {
   const response = await api.get(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { Authorization: `Bearer ${token}` },
   });
   return response.data;
+};
+
+// Function to handle setting users and updating localStorage
+const updateUsers = (users: User[]) => {
+  const uniqueUsers = Array.from(new Map(users.map((user) => [user.email, user])).values());
+  localStorage.setItem("users", JSON.stringify(uniqueUsers));
+  return uniqueUsers;
 };
 
 export default function UserPage() {
   const triggerToast = useCustomToast();
   const elementRef = useRef<HTMLDivElement | null>(null); // Typed the ref
 
-  const [users, setUsers] = useState<User[] | null>([]); // Initialize as an empty array
+  const [users, setUsers] = useState<User[]>([]);
+  const [page, setPage] = useState<number>(1);
 
   // Check for data in localStorage on initial load
   useEffect(() => {
     const storedUsers = localStorage.getItem("users");
     if (storedUsers) {
-      setUsers(JSON.parse(storedUsers)); // Set users from localStorage if available
+      const parsedUsers: User[] = JSON.parse(storedUsers);
+      setUsers(updateUsers(parsedUsers)); // Update users state and localStorage
     }
+
+    const storedPage = localStorage.getItem("page");
+    if (storedPage) setPage(Number(storedPage));
   }, []);
 
   // SWR Infinite Query setup
-  const { data, error, size, setSize, isValidating, isLoading } = useSWRInfinite(
+  const { data, error, size, setSize, isValidating } = useSWRInfinite(
     (index) => `/users/users?page=${index + 1}&limit=10`,
     fetcher,
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
+    { revalidateOnFocus: false, revalidateOnReconnect: false }
   );
 
   // Merge users from different pages into a single array
   useEffect(() => {
     if (data) {
-      setUsers((prevUsers) => {
-        const mergedUsers = [
-          ...(prevUsers || []), // Keep the previous users (or an empty array if null)
-          ...data[data.length - 1]?.users || [], // Add new users from the latest page
-        ];
-        localStorage.setItem("users", JSON.stringify(mergedUsers)); // Update localStorage
-        return mergedUsers;
-      });
+      const mergedUsers = [...users, ...data[data.length - 1]?.users || []];
+      setUsers(updateUsers(mergedUsers)); // Update state and localStorage
     }
   }, [data]);
 
@@ -68,35 +69,38 @@ export default function UserPage() {
       ([entry]) => {
         if (entry.isIntersecting && !isValidating) {
           setSize(size + 1); // Load next page
+          setPage((prevPage) => prevPage + 1); // Update page state
         }
       },
       { threshold: 0.1 }
     );
 
-    if (elementRef.current) {
-      observer.observe(elementRef.current);
-    }
+    if (elementRef.current) observer.observe(elementRef.current);
 
     return () => {
-      if (elementRef.current) {
-        observer.unobserve(elementRef.current);
-      }
+      if (elementRef.current) observer.unobserve(elementRef.current);
     };
   }, [isValidating, size, setSize]);
 
-  // Function to delete user by ID
-  const handleDeleteUser = async (userId: string) => {
+  // Centralized error handler for API calls
+  const handleApiError = useCallback((message: string) => {
+    console.error(message);
+    triggerToast({
+      title: message,
+      status: "error",
+    });
+  }, [triggerToast]);
+
+  // Delete user by ID
+  const handleDeleteUser = useCallback(async (userId: string) => {
     try {
       await api.delete(`/users/delete/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      // Remove user from state
-      setUsers((prevUsers: any) => {
-        const updatedUsers = prevUsers?.filter((user: User) => user._id !== userId);
-        localStorage.setItem("users", JSON.stringify(updatedUsers)); // Update localStorage
+      setUsers((prevUsers) => {
+        const updatedUsers = prevUsers.filter((user) => user._id !== userId);
+        updateUsers(updatedUsers); // Update localStorage
         return updatedUsers;
       });
 
@@ -104,29 +108,24 @@ export default function UserPage() {
         title: "User deleted successfully.",
         status: "success",
       });
-    } catch (error) {
-      console.error("Error deleting user:", error);
-      triggerToast({
-        title: "Error deleting user.",
-        status: "error",
-      });
+    } catch {
+      handleApiError("Error deleting user.");
     }
-  };
+  }, [handleApiError, triggerToast]);
 
-  const handleUpdateUser = (updatedUser: User) => {
-    setUsers((prevUsers: any) => {
-      const updatedUsers = prevUsers?.map((user: User) =>
+  // Update user data
+  const handleUpdateUser = useCallback((updatedUser: User) => {
+    setUsers((prevUsers) => {
+      const updatedUsers = prevUsers.map((user) =>
         user._id === updatedUser._id ? { ...user, ...updatedUser } : user
       );
-      localStorage.setItem("users", JSON.stringify(updatedUsers)); // Update localStorage
+      updateUsers(updatedUsers); // Update localStorage
       return updatedUsers;
     });
-  };
+  }, []);
 
-  // Error handling
-  if (error) {
-    return <div>Error fetching users. Please try again later.</div>;
-  }
+  // Error handling for data fetching
+  if (error) return <div>Error fetching users. Please try again later.</div>;
 
   return (
     <div>
@@ -135,22 +134,13 @@ export default function UserPage() {
       </h1>
       <div className="space-y-6">
         {users?.map((user, index) => (
-          <UserItem
-            key={index}
-            user={user}
-            onDelete={handleDeleteUser}
-            onSave={handleUpdateUser}
-          />
+          <UserItem key={index} user={user} onDelete={handleDeleteUser} onSave={handleUpdateUser} />
         ))}
       </div>
       {isValidating && <Loading />}
       <div ref={elementRef} className="my-4">
-        {/* Button to manually load more data */}
         {data && data.length && !isValidating && (
-          <button
-            onClick={() => setSize(size + 1)}
-            className="text-center"
-          >
+          <button onClick={() => setSize(size + 1)} className="text-center">
             End of users
           </button>
         )}
