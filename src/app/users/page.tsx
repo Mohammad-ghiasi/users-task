@@ -24,7 +24,9 @@ const fetcher = async (url: string) => {
 
 // Function to handle setting users and updating localStorage
 const updateUsers = (users: User[]) => {
-  const uniqueUsers = Array.from(new Map(users.map((user) => [user.email, user])).values());
+  const uniqueUsers = Array.from(
+    new Map(users.map((user) => [user.email, user])).values()
+  );
   localStorage.setItem("users", JSON.stringify(uniqueUsers));
   return uniqueUsers;
 };
@@ -41,7 +43,7 @@ export default function UserPage() {
     const storedUsers = localStorage.getItem("users");
     if (storedUsers) {
       const parsedUsers: User[] = JSON.parse(storedUsers);
-      setUsers(updateUsers(parsedUsers)); // Update users state and localStorage
+      setUsers(parsedUsers); // Set initial users state from localStorage
     }
 
     const storedPage = localStorage.getItem("page");
@@ -58,10 +60,14 @@ export default function UserPage() {
   // Merge users from different pages into a single array
   useEffect(() => {
     if (data) {
-      const mergedUsers = [...users, ...data[data.length - 1]?.users || []];
-      setUsers(updateUsers(mergedUsers)); // Update state and localStorage
+      const newUsers = data[data.length - 1]?.users || [];
+      setUsers((prevUsers) => {
+        const mergedUsers = [...prevUsers, ...newUsers];
+        const updatedUsers = updateUsers(mergedUsers); // Update state and localStorage
+        return updatedUsers;
+      });
     }
-  }, [data]);
+  }, [data]); // Only depend on 'data' here
 
   // Infinite scrolling using IntersectionObserver
   useEffect(() => {
@@ -70,6 +76,7 @@ export default function UserPage() {
         if (entry.isIntersecting && !isValidating) {
           setSize(size + 1); // Load next page
           setPage((prevPage) => prevPage + 1); // Update page state
+          localStorage.setItem("page", (page + 1).toString()); // Store page in localStorage
         }
       },
       { threshold: 0.1 }
@@ -80,38 +87,44 @@ export default function UserPage() {
     return () => {
       if (elementRef.current) observer.unobserve(elementRef.current);
     };
-  }, [isValidating, size, setSize]);
+  }, [isValidating, size, setSize, page]); // Make sure to use `page` in dependencies
 
   // Centralized error handler for API calls
-  const handleApiError = useCallback((message: string) => {
-    console.error(message);
-    triggerToast({
-      title: message,
-      status: "error",
-    });
-  }, [triggerToast]);
+  const handleApiError = useCallback(
+    (message: string) => {
+      console.error(message);
+      triggerToast({
+        title: message,
+        status: "error",
+      });
+    },
+    [triggerToast]
+  );
 
   // Delete user by ID
-  const handleDeleteUser = useCallback(async (userId: string) => {
-    try {
-      await api.delete(`/users/delete/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+  const handleDeleteUser = useCallback(
+    async (userId: string) => {
+      try {
+        await api.delete(`/users/delete/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-      setUsers((prevUsers) => {
-        const updatedUsers = prevUsers.filter((user) => user._id !== userId);
-        updateUsers(updatedUsers); // Update localStorage
-        return updatedUsers;
-      });
+        setUsers((prevUsers) => {
+          const updatedUsers = prevUsers.filter((user) => user._id !== userId);
+          updateUsers(updatedUsers); // Update localStorage
+          return updatedUsers;
+        });
 
-      triggerToast({
-        title: "User deleted successfully.",
-        status: "success",
-      });
-    } catch {
-      handleApiError("Error deleting user.");
-    }
-  }, [handleApiError, triggerToast]);
+        triggerToast({
+          title: "User deleted successfully.",
+          status: "success",
+        });
+      } catch {
+        handleApiError("Error deleting user.");
+      }
+    },
+    [handleApiError, triggerToast]
+  );
 
   // Update user data
   const handleUpdateUser = useCallback((updatedUser: User) => {
@@ -134,7 +147,12 @@ export default function UserPage() {
       </h1>
       <div className="space-y-6">
         {users?.map((user, index) => (
-          <UserItem key={index} user={user} onDelete={handleDeleteUser} onSave={handleUpdateUser} />
+          <UserItem
+            key={index}
+            user={user}
+            onDelete={handleDeleteUser}
+            onSave={handleUpdateUser}
+          />
         ))}
       </div>
       {isValidating && <Loading />}
