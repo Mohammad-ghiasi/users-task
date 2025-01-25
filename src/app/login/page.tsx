@@ -5,7 +5,7 @@ import Link from "next/link";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import useCustomToast from "@/hooks/toast/ToastNotification ";
+import useCustomToast from "@/hooks/ToastNotification ";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { ILoginForm } from "@/types/myTypes";
@@ -104,7 +104,7 @@ const LoginForm = () => {
         <p className="text-[11px] md:text-[13px] text-gray-500">
           Dont have account?{" "}
           <span className="text-blue-600 underline">
-            <Link href="/signup">create on</Link>
+            <Link href="/signup">create one</Link>
           </span>
         </p>
       </form>

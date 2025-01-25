@@ -1,5 +1,8 @@
 import { ToastOptions } from "react-toastify";
 
+//react query types
+export type reactQueryTypeProp = { children: React.ReactNode };
+
 // toast type
 export type ToastStatus = "success" | "error" | "warning" | "info";
 export interface CustomToast {
