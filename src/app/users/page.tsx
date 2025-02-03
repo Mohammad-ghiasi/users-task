@@ -20,7 +20,7 @@ const token: string | undefined = Cookies.get("token");
 const fetcher = async (pageNum: pageType = 1) => {
   let handlePageNum: pageType = pageNum;
   pageNum === "users" ? (handlePageNum = 1) : null;
-  const response = await api.get(`/users/users?page=${handlePageNum}&limit=5`, {
+  const response = await api.get(`/users/users?page=${handlePageNum}&limit=15`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response.data;

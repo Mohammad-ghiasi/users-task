@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation";
 import api from "@/utils/api"; // Assuming you have a centralized Axios instance
 import { toast, ToastContainer } from "react-toastify";
 import { addUserProp, ISignupForm } from "@/types/myTypes";
-
-
+import { mutate } from "swr";
 
 export default function AddUser({ redirect }: addUserProp) {
   const {
@@ -27,9 +26,18 @@ export default function AddUser({ redirect }: addUserProp) {
         if (res.data.token) {
           Cookies.set("token", res.data.token, { expires: 7 });
         }
+      
+        // set in thet cash
+        mutate(
+          "users",
+          (prevdata: any) => {
+            return { ...prevdata, users: [...prevdata.users, res.data.createdNewUser] };
+          },
+          false
+        );
 
         // Show success message
-        toast.success("Account created successfully! Redirecting...", {
+        toast.success("Account created successfully!", {
           position: "top-center",
         });
         if (redirect) {

@@ -30,16 +30,16 @@ export default function EditModal({ user, isOpen, onClose }: EditModalProps) {
 
   const handleSave = async (updatedUser: User) => {
     try {
-      mutate(
-        "users",
-        (prevdata: any) => {
-          const updates = prevdata.users.map((user: User) => {
-            return user._id === updatedUser._id ? updatedUser : user;
-          });
-          return { ...prevdata, users: [...updates] };
-        },
-        false
-      );
+      // mutate(
+      //   "users",
+      //   (prevdata: any) => {
+      //     const updates = prevdata.users.map((user: User) => {
+      //       return user._id === updatedUser._id ? updatedUser : user;
+      //     });
+      //     return { ...prevdata, users: [...updates] };
+      //   },
+      //   false
+      // );
       await api
         .put(`/users/updateUsers/${updatedUser._id}`, updatedUser, {
           headers: {
@@ -69,14 +69,16 @@ export default function EditModal({ user, isOpen, onClose }: EditModalProps) {
             },
             false
           );
-          toast.error("Faild to update user.", {
+          toast.error(err.response.data.message || 'faild to create new account!', {
             position: "top-center",
           });
+          console.log(err.response.data.message);
+          
         });
     } catch (err) {
       toast.error("Faild to update user.", {
         position: "top-center",
-      });
+      });      
     }
   };
 
