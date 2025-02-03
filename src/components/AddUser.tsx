@@ -20,7 +20,6 @@ export default function AddUser({ redirect }: addUserProp) {
     try {
       // Send signup request
       const res = await api.post("/users/signup", data);
-      console.log(res);
 
       // Check if the signup was successful
       if (res.status === 201) {
@@ -43,7 +42,6 @@ export default function AddUser({ redirect }: addUserProp) {
         error.response?.data?.message || "Signup failed. Please try again.",
         { position: "top-center" }
       );
-      console.log(error);
     }
   };
   return (

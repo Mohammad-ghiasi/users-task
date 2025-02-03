@@ -4,25 +4,24 @@ Here's an updated README template for your project, considering the new feature 
 
 # User Management System
 
-A user management system built using **Next.js**, **React**, and **Express.js**. This project implements features like infinite scrolling, user editing, user deletion, and a user-friendly interface for managing user information. Additionally, the system uses **local storage** to store and manage data, ensuring that updates, deletions, and additions are reflected without needing to fetch data on every page load.
+A user management system built using **Next.js**, **React**, and **Express.js**. This project implements features like infinite scrolling, user editing, user deletion, and a user-friendly interface for managing user information. Additionally, the system uses **SWR** to store and manage data, ensuring that updates, deletions, and additions are reflected without needing to fetch data on every page load.
 
 ## Features
 
 - **Infinite Scrolling**: The list of users loads dynamically as the user scrolls down the page, fetching more users without reloading the entire page.
 - **User Editing**: Users can be edited directly through a modal, with updated information saved to the backend.
 - **User Deletion**: Users can be deleted from the system, and the changes are reflected immediately on the page.
-- **Local Storage**: The system leverages local storage to store user data, ensuring that even after updates, additions, or deletions, the data is preserved. On page load, the data is first fetched from local storage, and if no data exists, new data is fetched from the backend.
-- **Authentication**: Secured API routes that require an authorization token for making requests.
+- **SWR**: The system leverages local cash storage to store user data, ensuring that even after updates, additions, or deletions, the data is preserved. On page load, the data is first fetched from local storage, and if no data exists, new data is fetched from the backend.
+- **Authentication**: Secured API routes that require an authorization token for making requests (JWT).
 
 ## Tech Stack
 
-- **Frontend**: Next.js, React, Chakra UI
+- **Frontend**: Next.js, React, Chakra UI, SWR
 - **Backend**: Express.js, MongoDB
 - **Authentication**: JWT, Cookies (js-cookie)
 - **API Calls**: Axios
-- **Styling**: Tailwind CSS, Chakra UI
-- **Real-Time**: WebSockets (Socket.IO)
-- **Storage**: Local Storage for persistent data
+- **Styling**: Tailwind CSS
+
 
 ## Installation
 

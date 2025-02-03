@@ -2,13 +2,12 @@ import { useEffect } from "react";
 import { FaSave, FaTimes } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { EditModalProps, User } from "@/types/myTypes";
-
-export default function EditModal({
-  user,
-  isOpen,
-  onClose,
-  onSave,
-}: EditModalProps) {
+import api from "@/utils/api";
+import Cookies from "js-cookie";
+import { mutate } from "swr";
+import { toast, ToastContainer } from "react-toastify";
+export default function EditModal({ user, isOpen, onClose }: EditModalProps) {
+  const token = Cookies.get("token");
   const {
     register,
     handleSubmit,
@@ -18,6 +17,7 @@ export default function EditModal({
     defaultValues: user,
   });
 
+  // for default value form input
   useEffect(() => {
     if (isOpen) {
       // Reset form values when the modal opens
@@ -28,9 +28,60 @@ export default function EditModal({
     }
   }, [isOpen, user, setValue]);
 
+  const handleSave = async (updatedUser: User) => {
+    try {
+      mutate(
+        "users",
+        (prevdata: any) => {
+          const updates = prevdata.users.map((user: User) => {
+            return user._id === updatedUser._id ? updatedUser : user;
+          });
+          return { ...prevdata, users: [...updates] };
+        },
+        false
+      );
+      await api
+        .put(`/users/updateUsers/${updatedUser._id}`, updatedUser, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          mutate(
+            "users",
+            (prevdata: any) => {
+              const updates = prevdata.users.map((user: User) => {
+                return user._id === res.data.updatedUser._id
+                  ? res.data.updatedUser
+                  : user;
+              });
+              return { ...prevdata, users: [...updates] };
+            },
+            false
+          );
+          onClose();
+        })
+        .catch((err) => {
+          mutate(
+            "users",
+            (prevdata: any) => {
+              return prevdata;
+            },
+            false
+          );
+          toast.error("Faild to update user.", {
+            position: "top-center",
+          });
+        });
+    } catch (err) {
+      toast.error("Faild to update user.", {
+        position: "top-center",
+      });
+    }
+  };
+
   const onSubmit = (updatedUser: User) => {
-    onSave(updatedUser); // Save updated user data
-    onClose(); // Close the modal after saving
+    handleSave(updatedUser);
   };
 
   return (
@@ -154,6 +205,7 @@ export default function EditModal({
             </form>
           </div>
         </div>
+        <ToastContainer />
       </div>
     )
   );

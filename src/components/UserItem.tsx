@@ -1,36 +1,12 @@
 import { useState } from "react";
 import { FaEnvelope, FaMapMarkerAlt, FaEdit, FaTrash } from "react-icons/fa";
 import EditModal from "@/components/EditModal";
-import api from "@/utils/api";
-import Cookies from "js-cookie";
 import Link from "next/link";
 import { User } from "@/types/myTypes";
+import RemoveUser from "./RemoveUser";
 
-export default function UserItem({
-  user,
-  onDelete,
-  onSave,
-}: {
-  user: User;
-  onDelete: (userId: string) => void;
-  onSave: (updatedUser: User) => void;
-}) {
+export default function UserItem({ user }: { user: User }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const token = Cookies.get("token");
-
-  const handleSave = async (updatedUser: User) => {
-    try {
-      await api.put(`/users/updateUsers/${updatedUser._id}`, updatedUser, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // Update the user in the parent component's state
-      onSave(updatedUser);
-    } catch (err) {
-      console.error("Error updating user:", err);
-    }
-  };
 
   return (
     <>
@@ -67,12 +43,7 @@ export default function UserItem({
             >
               <FaEdit color="blue" />
             </button>
-            <button
-              className="hover:scale-110 transition-all"
-              onClick={() => onDelete(user._id)}
-            >
-              <FaTrash color="red" />
-            </button>
+            <RemoveUser id={user._id} />
           </div>
         </div>
       </div>
@@ -81,7 +52,6 @@ export default function UserItem({
         user={user}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSave={handleSave}
       />
     </>
   );

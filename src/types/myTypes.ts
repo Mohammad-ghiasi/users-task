@@ -20,6 +20,18 @@ export interface ILoginForm {
 // param types for dynamic routing
 export type propParams = { params: { userid: string }; searchParams: {} };
 
+export interface UserResponse {
+  users: User[];
+  pagination: Pagination;
+}
+
+export interface Pagination {
+  currentPage: number;
+  totalPages: number;
+  totalUsers: number;
+  pageSize: number;
+}
+
 // users type
 export type User = {
   _id: string;
@@ -28,8 +40,8 @@ export type User = {
   email: string;
   firstname: string;
   lastname: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   __v: number;
 };
 
@@ -51,5 +63,4 @@ export interface EditModalProps {
   user: User;
   isOpen: boolean;
   onClose: () => void;
-  onSave: (updatedUser: User) => void;
 }
