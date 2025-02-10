@@ -9,8 +9,7 @@ import useCustomToast from "@/hooks/ToastNotification ";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { ILoginForm } from "@/types/myTypes";
-
-
+import { FaEnvelope, FaLock } from "react-icons/fa";
 
 const LoginForm = () => {
   const triggerToast = useCustomToast();
@@ -21,19 +20,13 @@ const LoginForm = () => {
     formState: { errors },
   } = useForm<ILoginForm>();
 
-  // Handle form submission
   const onSubmit: SubmitHandler<ILoginForm> = async (data: ILoginForm) => {
     try {
-      // Send login request
       const res = await api.post("/users/login", data);
-  
-      // Check if token exists in the response
+
       if (res.data?.token) {
-        // Save token to a cookie (expires in 7 days)
         Cookies.set("token", res.data.token, { expires: 7 });
-  
-        // Redirect and reload
-        window.location.href = "/users"; // Redirect to /users and reload
+        window.location.href = "/users";
       } else {
         triggerToast({
           title: "Unexpected error: Token not found.",
@@ -42,70 +35,60 @@ const LoginForm = () => {
       }
     } catch (error: any) {
       triggerToast({
-        title:
-          error.response?.data?.message || "Login failed. Please try again.",
+        title: error.response?.data?.message || "Login failed. Please try again.",
         status: "error",
       });
     }
   };
-  
 
   return (
-    <div className="max-w-sm mx-auto">
+    <div className="max-w-sm mx-auto mt-20 p-6 bg-white shadow-lg rounded-lg">
+      <h2 className="text-2xl font-bold text-gray-700 text-center mb-4">Login</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Email
-          </label>
+        {/* Email */}
+        <div className="relative">
+          <FaEnvelope className="absolute left-3 top-3 text-gray-400" />
           <input
             type="email"
-            id="email"
             {...register("email", {
               required: "Email is required",
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                message: "Please enter a valid email address",
+                message: "Please enter a valid email",
               },
             })}
-            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+            placeholder="Email"
+            className="w-full pl-10 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm">{errors.email.message}</p>
-          )}
+          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
         </div>
 
-        <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Password
-          </label>
+        {/* Password */}
+        <div className="relative">
+          <FaLock className="absolute left-3 top-3 text-gray-400" />
           <input
             type="password"
-            id="password"
             {...register("password", { required: "Password is required" })}
-            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+            placeholder="Password"
+            className="w-full pl-10 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-          {errors.password && (
-            <p className="text-red-500 text-sm">{errors.password.message}</p>
-          )}
+          {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
-          className="w-full p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-all shadow-md active:scale-95"
         >
           Login
         </button>
-        <p className="text-[11px] md:text-[13px] text-gray-500">
-          Dont have account?{" "}
-          <span className="text-blue-600 underline">
-            <Link href="/signup">create one</Link>
-          </span>
+
+        {/* Signup Link */}
+        <p className="text-[11px] md:text-[13px] text-gray-500 text-center">
+          Don’t have an account?{" "}
+          <Link href="/signup" className="text-green-600 underline hover:text-green-700">
+            Create one
+          </Link>
         </p>
       </form>
       <ToastContainer />

@@ -1,11 +1,12 @@
 import { useEffect } from "react";
-import { FaSave, FaTimes } from "react-icons/fa";
+import { FaSave, FaTimes, FaUser, FaEnvelope, FaBriefcase } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { EditModalProps, User } from "@/types/myTypes";
 import api from "@/utils/api";
 import Cookies from "js-cookie";
 import { mutate } from "swr";
 import { toast, ToastContainer } from "react-toastify";
+
 export default function EditModal({ user, isOpen, onClose }: EditModalProps) {
   const token = Cookies.get("token");
   const {
@@ -13,14 +14,11 @@ export default function EditModal({ user, isOpen, onClose }: EditModalProps) {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<User>({
-    defaultValues: user,
-  });
+  } = useForm<User>({ defaultValues: user });
 
-  // for default value form input
+  // Set default values when modal opens
   useEffect(() => {
     if (isOpen) {
-      // Reset form values when the modal opens
       setValue("firstname", user.firstname);
       setValue("lastname", user.lastname);
       setValue("email", user.email);
@@ -30,55 +28,31 @@ export default function EditModal({ user, isOpen, onClose }: EditModalProps) {
 
   const handleSave = async (updatedUser: User) => {
     try {
-      // mutate(
-      //   "users",
-      //   (prevdata: any) => {
-      //     const updates = prevdata.users.map((user: User) => {
-      //       return user._id === updatedUser._id ? updatedUser : user;
-      //     });
-      //     return { ...prevdata, users: [...updates] };
-      //   },
-      //   false
-      // );
       await api
         .put(`/users/updateUsers/${updatedUser._id}`, updatedUser, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
           mutate(
             "users",
             (prevdata: any) => {
-              const updates = prevdata.users.map((user: User) => {
-                return user._id === res.data.updatedUser._id
-                  ? res.data.updatedUser
-                  : user;
-              });
+              const updates = prevdata.users.map((user: User) =>
+                user._id === res.data.updatedUser._id ? res.data.updatedUser : user
+              );
               return { ...prevdata, users: [...updates] };
             },
             false
           );
+          toast.success("User updated successfully!", { position: "top-center" });
           onClose();
         })
         .catch((err) => {
-          mutate(
-            "users",
-            (prevdata: any) => {
-              return prevdata;
-            },
-            false
-          );
-          toast.error(err.response.data.message || 'faild to create new account!', {
+          toast.error(err.response?.data?.message || "Failed to update user!", {
             position: "top-center",
           });
-          console.log(err.response.data.message);
-          
         });
     } catch (err) {
-      toast.error("Faild to update user.", {
-        position: "top-center",
-      });      
+      toast.error("Failed to update user.", { position: "top-center" });
     }
   };
 
@@ -88,74 +62,55 @@ export default function EditModal({ user, isOpen, onClose }: EditModalProps) {
 
   return (
     isOpen && (
-      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-        <div className="bg-white rounded-lg p-6 w-96">
+      <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
+        <div className="bg-white backdrop-blur-lg shadow-xl rounded-xl p-6 w-full max-w-md animate-fadeIn">
+          
+          {/* Modal Header */}
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold text-gray-800">Edit User</h2>
-            <button
-              onClick={onClose}
-              className="text-gray-500 hover:text-gray-700"
-            >
-              <FaTimes />
+            <button onClick={onClose} className="text-gray-500 hover:text-gray-800 transition-all">
+              <FaTimes size={18} />
             </button>
           </div>
 
-          <div className="mt-4">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="mb-4">
-                <label
-                  htmlFor="firstname"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  First Name
-                </label>
+          {/* Form */}
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-5 space-y-4">
+            
+            {/* First Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-600">First Name</label>
+              <div className="flex items-center border border-gray-300 rounded-lg p-2">
+                <FaUser className="text-gray-400 mr-2" />
                 <input
                   type="text"
-                  id="firstname"
-                  {...register("firstname", {
-                    required: "First name is required",
-                  })}
-                  className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+                  {...register("firstname", { required: "First name is required" })}
+                  className="w-full focus:outline-none"
                 />
-                {errors.firstname && (
-                  <p className="text-red-500 text-xs">
-                    {errors.firstname.message}
-                  </p>
-                )}
               </div>
+              {errors.firstname && <p className="text-red-500 text-xs mt-1">{errors.firstname.message}</p>}
+            </div>
 
-              <div className="mb-4">
-                <label
-                  htmlFor="lastname"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  Last Name
-                </label>
+            {/* Last Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-600">Last Name</label>
+              <div className="flex items-center border border-gray-300 rounded-lg p-2">
+                <FaUser className="text-gray-400 mr-2" />
                 <input
                   type="text"
-                  id="lastname"
-                  {...register("lastname", {
-                    required: "Last name is required",
-                  })}
-                  className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+                  {...register("lastname", { required: "Last name is required" })}
+                  className="w-full focus:outline-none"
                 />
-                {errors.lastname && (
-                  <p className="text-red-500 text-xs">
-                    {errors.lastname.message}
-                  </p>
-                )}
               </div>
+              {errors.lastname && <p className="text-red-500 text-xs mt-1">{errors.lastname.message}</p>}
+            </div>
 
-              <div className="mb-4">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  Email
-                </label>
+            {/* Email */}
+            <div>
+              <label className="block text-sm font-medium text-gray-600">Email</label>
+              <div className="flex items-center border border-gray-300 rounded-lg p-2">
+                <FaEnvelope className="text-gray-400 mr-2" />
                 <input
                   type="email"
-                  id="email"
                   {...register("email", {
                     required: "Email is required",
                     pattern: {
@@ -163,49 +118,45 @@ export default function EditModal({ user, isOpen, onClose }: EditModalProps) {
                       message: "Invalid email format",
                     },
                   })}
-                  className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+                  className="w-full focus:outline-none"
                 />
-                {errors.email && (
-                  <p className="text-red-500 text-xs">{errors.email.message}</p>
-                )}
               </div>
+              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+            </div>
 
-              <div className="mb-4">
-                <label
-                  htmlFor="job"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  Job
-                </label>
+            {/* Job */}
+            <div>
+              <label className="block text-sm font-medium text-gray-600">Job</label>
+              <div className="flex items-center border border-gray-300 rounded-lg p-2">
+                <FaBriefcase className="text-gray-400 mr-2" />
                 <input
-                  type="text"
-                  id="job"
-                  {...register("job", { required: "Job is required" })}
-                  className="w-full mt-1 p-2 border border-gray-300 rounded-md"
-                />
-                {errors.job && (
-                  <p className="text-red-500 text-xs">{errors.job.message}</p>
-                )}
-              </div>
 
-              <div className="flex justify-end space-x-4 mt-4">
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md flex items-center"
-                >
-                  <FaSave className="mr-2" />
-                  Save
-                </button>
+                  type="text"
+                  {...register("job", { required: "Job is required" })}
+                  className="w-full focus:outline-none"
+                />
               </div>
-            </form>
-          </div>
+              {errors.job && <p className="text-red-500 text-xs mt-1">{errors.job.message}</p>}
+            </div>
+
+            {/* Buttons */}
+            <div className="flex justify-end space-x-3 mt-4">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-green-500 text-white rounded-lg flex items-center hover:bg-green-600 transition-all"
+              >
+                <FaSave className="mr-2" />
+                Save
+              </button>
+            </div>
+          </form>
         </div>
         <ToastContainer />
       </div>

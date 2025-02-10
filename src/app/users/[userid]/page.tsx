@@ -2,14 +2,12 @@ import { propParams } from "@/types/myTypes";
 import api from "@/utils/api";
 import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 import { cookies } from "next/headers";
-import { FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import { FaEnvelopeOpenText, FaMapMarkedAlt } from "react-icons/fa";
+import { MdWork, MdOutlineDateRange } from "react-icons/md";
 
-
-
-export default async function page(props: propParams) {
+export default async function Page(props: propParams) {
   const cookieStore: ReadonlyRequestCookies = cookies();
   const token: string | undefined = cookieStore.get("token")?.value;
-
 
   const { data } = await api.get(`/users/user/${props.params.userid}`, {
     headers: {
@@ -17,33 +15,37 @@ export default async function page(props: propParams) {
     },
   });
 
-
   return (
-    <div className="rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out p-4">
-      <div className="flex flex-col space-y-4 items-center">
-        <div className="w-16 h-16 sm:w-24 sm:h-24 sm:me-5 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold mb-4 sm:mb-0">
-          {data.user.firstname[0]}
-          {data.user.lastname[0]}
+    <div className="max-w-lg mx-auto bg-white/80 backdrop-blur-lg shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-8 rounded-2xl border border-gray-200 mt-20">
+      <div className="flex flex-col items-center space-y-6">
+        
+        {/* Profile Avatar */}
+        <div className="relative">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-[#7BAF97] to-[#4A7C59] text-white flex items-center justify-center text-4xl font-bold shadow-lg">
+            {data.user.firstname[0]}
+            {data.user.lastname[0]}
+          </div>
+          <span className="absolute bottom-2 right-2 w-5 h-5 bg-green-500 rounded-full border-2 border-white shadow-md"></span>
         </div>
 
-        <div className="flex-grow space-y-2">
-          <p className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 truncate">
+        {/* User Information */}
+        <div className="text-center space-y-3">
+          <p className="text-xl sm:text-2xl font-semibold text-gray-900">
             {`${data.user.firstname} ${data.user.lastname}`}
           </p>
-          <p className="text-xs sm:text-sm md:text-base text-gray-500 flex items-center">
-            <FaEnvelope className="mr-2" />
+          <p className="text-sm sm:text-lg text-gray-600 flex items-center justify-center">
+            <FaEnvelopeOpenText className="mr-3 text-[#2d6a4f] text-xl" />
             {data.user.email}
           </p>
-          <p className="text-xs sm:text-sm md:text-base text-gray-500 flex items-center">
-            <FaMapMarkerAlt className="mr-2" />
+          <p className="text-sm sm:text-lg text-gray-600 flex items-center justify-center">
+            <MdWork className="mr-3 text-[#2d6a4f] text-xl" />
             {data.user.job}
           </p>
-          <p className="text-xs sm:text-sm md:text-base text-gray-500">
+          <p className="text-sm sm:text-lg text-gray-600 flex items-center justify-center">
+            <MdOutlineDateRange className="mr-3 text-[#2d6a4f] text-xl" />
             Joined: {new Date(data.user.createdAt).toLocaleDateString()}
           </p>
         </div>
-
-     
       </div>
     </div>
   );

@@ -1,9 +1,7 @@
 export default function Footer() {
   return (
-    <footer className=" text-gray-600 py-6 text-center">
-      <p>
-        &copy; {new Date().getFullYear()} Mohammad ghiasi. All rights reserved.
-      </p>
+    <footer className="bg-gray-100 text-gray-700 py-6 text-center border-t">
+      <p>&copy; {new Date().getFullYear()} Mohammad Ghiasi. All rights reserved.</p>
     </footer>
   );
 }

@@ -79,14 +79,13 @@ export default function UserPage() {
       </div>
       {isValidating && <Loading />}
       {!lastPage && (
-        <div
-          onClick={() => {
-            loadMoreHandler();
-          }}
-          className="text-center bg-gray-200 mx-5 mt-10 rounded-md py-1 transition-all cursor-pointer hover:bg-slate-300"
-        >
-          Load More
-        </div>
+       <div
+       onClick={loadMoreHandler}
+       className="text-center bg-gradient-to-r from-green-400 to-green-600 text-white mx-5 mt-10 rounded-lg py-2 transition-all cursor-pointer hover:opacity-80 shadow-md active:scale-95 select-none"
+     >
+       Load More
+     </div>
+     
       )}
 
       <div className="my-4">

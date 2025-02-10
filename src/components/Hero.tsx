@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="text-gray-500 py-20 text-center shadow-md">
+    <section className="text-gray-700 py-20 text-center shadow-md">
       <h1 className="text-4xl md:text-6xl font-bold">
         Welcome to Infinite Scrolling
       </h1>
@@ -11,7 +11,7 @@ export default function Hero() {
       </p>
       <div className="mt-6">
         <Link href="/users">
-          <button className="px-6 py-3 text-gray-600 bg-gray-300 font-semibold rounded-lg hover:bg-gray-200">
+          <button className="px-6 py-3 text-white bg-[#2d6a4f] font-semibold rounded-lg hover:bg-[#4A7C59] transition-all">
             View Users
           </button>
         </Link>

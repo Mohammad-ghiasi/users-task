@@ -2,10 +2,11 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import api from "@/utils/api"; // Assuming you have a centralized Axios instance
+import api from "@/utils/api";
 import { toast, ToastContainer } from "react-toastify";
 import { addUserProp, ISignupForm } from "@/types/myTypes";
 import { mutate } from "swr";
+import { FaUser, FaEnvelope, FaLock, FaBriefcase } from "react-icons/fa";
 
 export default function AddUser({ redirect }: addUserProp) {
   const {
@@ -17,132 +18,102 @@ export default function AddUser({ redirect }: addUserProp) {
 
   const onSubmit: SubmitHandler<ISignupForm> = async (data) => {
     try {
-      // Send signup request
       const res = await api.post("/users/signup", data);
-
-      // Check if the signup was successful
       if (res.status === 201) {
-        // Save token to cookie if returned
         if (res.data.token) {
           Cookies.set("token", res.data.token, { expires: 7 });
         }
-      
-        // set in thet cash
         mutate(
           "users",
-          (prevdata: any) => {
-            return { ...prevdata, users: [...prevdata.users, res.data.createdNewUser] };
-          },
+          (prevdata: any) => ({
+            ...prevdata,
+            users: [...prevdata.users, res.data.createdNewUser],
+          }),
           false
         );
 
-        // Show success message
-        toast.success("Account created successfully!", {
-          position: "top-center",
-        });
-        if (redirect) {
-          router.push(redirect);
-        }
+        toast.success("Account created successfully!", { position: "top-center" });
+        if (redirect) router.push(redirect);
       }
     } catch (error: any) {
-      // Handle errors and show feedback
-      toast.error(
-        error.response?.data?.message || "Signup failed. Please try again.",
-        { position: "top-center" }
-      );
+      toast.error(error.response?.data?.message || "Signup failed. Please try again.", {
+        position: "top-center",
+      });
     }
   };
+
   return (
-    <div className="max-w-md mx-auto mt-10">
-      <h2 className="text-2xl font-bold mb-4">Signup</h2>
+    <div className="max-w-md mx-auto mt-20 p-6 bg-white shadow-lg rounded-lg ">
+      <h2 className="text-2xl font-bold text-gray-700 text-center mb-4">Sign Up</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
-          <label htmlFor="firstname" className="block font-medium">
-            First Name
-          </label>
+        {/* First Name */}
+        <div className="relative">
+          <FaUser className="absolute left-3 top-3 text-gray-400" />
           <input
             {...register("firstname", { required: "First name is required" })}
-            id="firstname"
-            type="text"
-            className="w-full border rounded px-3 py-2"
+            placeholder="First Name"
+            className="w-full pl-10 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-          {errors.firstname && (
-            <p className="text-red-500 text-sm">{errors.firstname.message}</p>
-          )}
+          {errors.firstname && <p className="text-red-500 text-sm">{errors.firstname.message}</p>}
         </div>
-        <div>
-          <label htmlFor="lastname" className="block font-medium">
-            Last Name
-          </label>
+
+        {/* Last Name */}
+        <div className="relative">
+          <FaUser className="absolute left-3 top-3 text-gray-400" />
           <input
             {...register("lastname", { required: "Last name is required" })}
-            id="lastname"
-            type="text"
-            className="w-full border rounded px-3 py-2"
+            placeholder="Last Name"
+            className="w-full pl-10 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-          {errors.lastname && (
-            <p className="text-red-500 text-sm">{errors.lastname.message}</p>
-          )}
+          {errors.lastname && <p className="text-red-500 text-sm">{errors.lastname.message}</p>}
         </div>
-        <div>
-          <label htmlFor="email" className="block font-medium">
-            Email
-          </label>
+
+        {/* Email */}
+        <div className="relative">
+          <FaEnvelope className="absolute left-3 top-3 text-gray-400" />
           <input
             {...register("email", {
               required: "Email is required",
-              pattern: {
-                value: /^\S+@\S+\.\S+$/,
-                message: "Please enter a valid email address",
-              },
+              pattern: { value: /^\S+@\S+\.\S+$/, message: "Please enter a valid email" },
             })}
-            id="email"
-            type="email"
-            className="w-full border rounded px-3 py-2"
+            placeholder="Email"
+            className="w-full pl-10 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm">{errors.email.message}</p>
-          )}
+          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
         </div>
-        <div>
-          <label htmlFor="password" className="block font-medium">
-            Password
-          </label>
+
+        {/* Password */}
+        <div className="relative">
+          <FaLock className="absolute left-3 top-3 text-gray-400" />
           <input
             {...register("password", {
               required: "Password is required",
-              minLength: 6,
+              minLength: { value: 6, message: "Must be at least 6 characters" },
             })}
-            id="password"
             type="password"
-            className="w-full border rounded px-3 py-2"
+            placeholder="Password"
+            className="w-full pl-10 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-          {errors.password && (
-            <p className="text-red-500 text-sm">
-              {errors.password.message ||
-                "Password must be at least 6 characters"}
-            </p>
-          )}
+          {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
         </div>
-        <div>
-          <label htmlFor="job" className="block font-medium">
-            Job
-          </label>
+
+        {/* Job */}
+        <div className="relative">
+          <FaBriefcase className="absolute left-3 top-3 text-gray-400" />
           <input
             {...register("job", { required: "Job is required" })}
-            id="job"
-            type="text"
-            className="w-full border rounded px-3 py-2"
+            placeholder="Job"
+            className="w-full pl-10 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-          {errors.job && (
-            <p className="text-red-500 text-sm">{errors.job.message}</p>
-          )}
+          {errors.job && <p className="text-red-500 text-sm">{errors.job.message}</p>}
         </div>
+
+        {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+          className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-all shadow-md active:scale-95"
         >
-          Signup
+          Sign Up
         </button>
       </form>
       <ToastContainer />
