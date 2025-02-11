@@ -4,6 +4,7 @@ import { mutate } from "swr";
 import Cookies from "js-cookie";
 import { User } from "@/types/myTypes";
 import { toast } from "react-toastify";
+import Button from "./UI/Button";
 
 export default function RemoveUser({ id }: { id: string }) {
   const token = Cookies.get("token");
@@ -48,11 +49,12 @@ export default function RemoveUser({ id }: { id: string }) {
   };
 
   return (
-    <button
+    <Button
       onClick={() => userRemover(id)}
-      className="hover:scale-110 transition-all"
+      className="ownstyle  pt-3"
     >
       <FaTrash color="red" />
-    </button>
+    </Button>
+    
   );
 }

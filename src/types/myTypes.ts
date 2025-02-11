@@ -20,11 +20,13 @@ export interface ILoginForm {
 // param types for dynamic routing
 export type propParams = { params: { userid: string }; searchParams: {} };
 
+// finall users
 export interface UserResponse {
   users: User[];
   pagination: Pagination;
 }
 
+// pagination info
 export interface Pagination {
   currentPage: number;
   totalPages: number;
@@ -63,4 +65,15 @@ export interface EditModalProps {
   user: User;
   isOpen: boolean;
   onClose: () => void;
+}
+
+
+
+// UI types
+
+//btn type
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+  className?: string;
+  isLoading?: boolean
 }

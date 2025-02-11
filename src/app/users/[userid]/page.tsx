@@ -33,6 +33,7 @@ export default async function Page(props: propParams) {
           <p className="text-xl sm:text-2xl font-semibold text-gray-900">
             {`${data.user.firstname} ${data.user.lastname}`}
           </p>
+          <div className="flex flex-col items-start">
           <p className="text-sm sm:text-lg text-gray-600 flex items-center justify-center">
             <FaEnvelopeOpenText className="mr-3 text-[#2d6a4f] text-xl" />
             {data.user.email}
@@ -45,6 +46,7 @@ export default async function Page(props: propParams) {
             <MdOutlineDateRange className="mr-3 text-[#2d6a4f] text-xl" />
             Joined: {new Date(data.user.createdAt).toLocaleDateString()}
           </p>
+          </div>
         </div>
       </div>
     </div>

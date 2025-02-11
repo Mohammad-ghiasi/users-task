@@ -7,6 +7,8 @@ import { toast, ToastContainer } from "react-toastify";
 import { addUserProp, ISignupForm } from "@/types/myTypes";
 import { mutate } from "swr";
 import { FaUser, FaEnvelope, FaLock, FaBriefcase } from "react-icons/fa";
+import Button from "./UI/Button";
+import { useState } from "react";
 
 export default function AddUser({ redirect }: addUserProp) {
   const {
@@ -15,9 +17,11 @@ export default function AddUser({ redirect }: addUserProp) {
     formState: { errors },
   } = useForm<ISignupForm>();
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<ISignupForm> = async (data) => {
     try {
+      setLoading(true)
       const res = await api.post("/users/signup", data);
       if (res.status === 201) {
         if (res.data.token) {
@@ -32,19 +36,28 @@ export default function AddUser({ redirect }: addUserProp) {
           false
         );
 
-        toast.success("Account created successfully!", { position: "top-center" });
+        toast.success("Account created successfully!", {
+          position: "top-center",
+        });
+        setLoading(false);
         if (redirect) router.push(redirect);
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "Signup failed. Please try again.", {
-        position: "top-center",
-      });
+      toast.error(
+        error.response?.data?.message || "Signup failed. Please try again.",
+        {
+          position: "top-center",
+        }
+      );
+      setLoading(false);
     }
   };
 
   return (
     <div className="max-w-md mx-auto mt-20 p-6 bg-white shadow-lg rounded-lg ">
-      <h2 className="text-2xl font-bold text-gray-700 text-center mb-4">Sign Up</h2>
+      <h2 className="text-2xl font-bold text-gray-700 text-center mb-4">
+        Sign Up
+      </h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* First Name */}
         <div className="relative">
@@ -54,7 +67,9 @@ export default function AddUser({ redirect }: addUserProp) {
             placeholder="First Name"
             className="w-full pl-10 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-          {errors.firstname && <p className="text-red-500 text-sm">{errors.firstname.message}</p>}
+          {errors.firstname && (
+            <p className="text-red-500 text-sm">{errors.firstname.message}</p>
+          )}
         </div>
 
         {/* Last Name */}
@@ -65,7 +80,9 @@ export default function AddUser({ redirect }: addUserProp) {
             placeholder="Last Name"
             className="w-full pl-10 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-          {errors.lastname && <p className="text-red-500 text-sm">{errors.lastname.message}</p>}
+          {errors.lastname && (
+            <p className="text-red-500 text-sm">{errors.lastname.message}</p>
+          )}
         </div>
 
         {/* Email */}
@@ -74,12 +91,17 @@ export default function AddUser({ redirect }: addUserProp) {
           <input
             {...register("email", {
               required: "Email is required",
-              pattern: { value: /^\S+@\S+\.\S+$/, message: "Please enter a valid email" },
+              pattern: {
+                value: /^\S+@\S+\.\S+$/,
+                message: "Please enter a valid email",
+              },
             })}
             placeholder="Email"
             className="w-full pl-10 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email.message}</p>
+          )}
         </div>
 
         {/* Password */}
@@ -94,7 +116,9 @@ export default function AddUser({ redirect }: addUserProp) {
             placeholder="Password"
             className="w-full pl-10 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-          {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password.message}</p>
+          )}
         </div>
 
         {/* Job */}
@@ -105,16 +129,16 @@ export default function AddUser({ redirect }: addUserProp) {
             placeholder="Job"
             className="w-full pl-10 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-          {errors.job && <p className="text-red-500 text-sm">{errors.job.message}</p>}
+          {errors.job && (
+            <p className="text-red-500 text-sm">{errors.job.message}</p>
+          )}
         </div>
 
         {/* Submit Button */}
-        <button
-          type="submit"
-          className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-all shadow-md active:scale-95"
-        >
+        <Button type="submit" className="w-full shadow-md" isLoading={loading}>
           Sign Up
-        </button>
+        </Button>
+        
       </form>
       <ToastContainer />
     </div>
