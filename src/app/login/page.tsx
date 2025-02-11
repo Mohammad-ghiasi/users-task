@@ -88,7 +88,7 @@ const LoginForm = () => {
         </div>
 
         {/* Submit Button */}
-        <Button type="submit" className="w-full shadow-md">
+        <Button type="submit" className="w-full shadow-md" isLoading={loading}>
           Login
         </Button>
 
