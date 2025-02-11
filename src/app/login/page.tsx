@@ -10,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 import { ILoginForm } from "@/types/myTypes";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import Button from "@/components/UI/Button";
+import { useState } from "react";
 
 const LoginForm = () => {
   const triggerToast = useCustomToast();
@@ -18,19 +19,23 @@ const LoginForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<ILoginForm>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<ILoginForm> = async (data: ILoginForm) => {
     try {
+      setLoading(true)
       const res = await api.post("/users/login", data);
 
       if (res.data?.token) {
         Cookies.set("token", res.data.token, { expires: 7 });
+        setLoading(false)
         window.location.href = "/users";
       } else {
         triggerToast({
           title: "Unexpected error: Token not found.",
           status: "error",
         });
+        setLoading(false)
       }
     } catch (error: any) {
       triggerToast({
@@ -38,6 +43,7 @@ const LoginForm = () => {
           error.response?.data?.message || "Login failed. Please try again.",
         status: "error",
       });
+      setLoading(false)
     }
   };
 
