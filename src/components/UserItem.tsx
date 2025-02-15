@@ -6,13 +6,27 @@ import { User } from "@/types/myTypes";
 import RemoveUser from "./RemoveUser";
 import { MdOutlineDateRange, MdWork } from "react-icons/md";
 import Button from "./UI/Button";
+import { getUserIdCharecter } from "@/app/users/page";
 
-export default function UserItem({ user }: { user: User }) {
+export default function UserItem({
+  user,
+  hashedId,
+}: {
+  user: User;
+  hashedId?: string;
+}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const isCurrentUser = getUserIdCharecter(user._id) === hashedId;
 
   return (
     <>
-      <div className="bg-white/80 backdrop-blur-lg shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-8 rounded-2xl border border-gray-200 max-w-2xl w-full mx-auto">
+      <div
+        className={`${
+          isCurrentUser
+            ? "bg-green-100 border-green-500"
+            : "bg-white/80 border-gray-200"
+        } backdrop-blur-lg shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-8 rounded-2xl border max-w-3xl w-full mx-auto`}
+      >
         <div className="flex flex-col sm:flex-row items-center sm:space-x-8 text-center sm:text-left">
           {/* Profile Avatar */}
           <div className="relative">

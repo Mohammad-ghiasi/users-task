@@ -24,10 +24,11 @@ const LoginForm = () => {
   const onSubmit: SubmitHandler<ILoginForm> = async (data: ILoginForm) => {
     try {
       setLoading(true)
-      const res = await api.post("/users/login", data);
+      const res = await api.post("/users/login", data);     
 
       if (res.data?.token) {
         Cookies.set("token", res.data.token, { expires: 7 });
+        Cookies.set("hashedId", res.data.userIdHash, { expires: 7 });
         setLoading(false)
         window.location.href = "/users";
       } else {

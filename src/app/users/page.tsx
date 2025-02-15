@@ -12,8 +12,12 @@ import Button from "@/components/UI/Button";
 
 type pageType = number | string;
 
+//latest 5 charecter 
+export const getUserIdCharecter = (id?: string): string | undefined => id?.slice(-6); 
+
 // Get token from cookies
 const token: string | undefined = Cookies.get("token");
+const hashedId: string | undefined = Cookies.get("hashedId");
 
 const fetcher = async (pageNum: pageType = 1) => {
   let handlePageNum: pageType = pageNum;
@@ -74,7 +78,7 @@ export default function UserPage() {
 
       <div className="space-y-6">
         {data?.users?.map((user: User) => (
-          <UserItem key={user._id} user={user} />
+          <UserItem key={user._id} user={user} hashedId={getUserIdCharecter(hashedId)}/>
         ))}
       </div>
       {!lastPage && (
