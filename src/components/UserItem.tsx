@@ -6,17 +6,16 @@ import { User } from "@/types/myTypes";
 import RemoveUser from "./RemoveUser";
 import { MdOutlineDateRange, MdWork } from "react-icons/md";
 import Button from "./UI/Button";
-import { getUserIdCharecter } from "@/app/users/page";
 
 export default function UserItem({
   user,
   hashedId,
 }: {
   user: User;
-  hashedId?: string;
+  hashedId: string | undefined;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const isCurrentUser = getUserIdCharecter(user._id) === hashedId;
+  const isCurrentUser = user._id.slice(-6) === hashedId;
 
   return (
     <>
