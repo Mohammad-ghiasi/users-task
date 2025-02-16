@@ -2,24 +2,53 @@
 
 import { useForm } from "react-hook-form";
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
-import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import Button from "./UI/Button";
 import { FaCrosshairs } from "react-icons/fa";
 import { useState } from "react";
+import customIcon from "./map/Marker";
+
+const LocateButton = ({
+  setPosition,
+}: {
+  setPosition: (pos: [number, number]) => void;
+}) => {
+  const map = useMap(); // 📌 گرفتن نقشه از useMap
+
+  const locateUser = () => {
+    if (!navigator.geolocation) {
+      alert("مرورگر شما از موقعیت‌یابی پشتیبانی نمی‌کند!");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setPosition([latitude, longitude]); // تنظیم موقعیت جدید
+        map.setView([latitude, longitude], map.getZoom()); // تغییر مرکز نقشه
+      },
+      () => {
+        alert("نمی‌توان موقعیت شما را دریافت کرد!");
+      },
+      { enableHighAccuracy: true }
+    );
+  };
+
+  return (
+    <>
+      <button
+        onClick={locateUser}
+        className="absolute bottom-4 left-4 bg-white p-3 rounded-full shadow-md border border-gray-300 hover:bg-gray-100 transition-all duration-300 flex items-center justify-center z-[1000]"
+      >
+        <FaCrosshairs className="text-gray-700 text-xl" />
+      </button>
+    </>
+  );
+};
 
 export type LocationFormType = {
   location: string;
 };
-
-
-
-const customIcon = new L.Icon({
-  iconUrl: "/location-pin.png", // مسیر عکس مارکر (درون پوشه public)
-  iconSize: [35, 35],
-  iconAnchor: [17, 34],
-  popupAnchor: [0, -34],
-});
 
 export default function GoogleMapWithLeaflet() {
   const {
@@ -28,30 +57,10 @@ export default function GoogleMapWithLeaflet() {
     reset,
     formState: { errors, isSubmitting },
   } = useForm<LocationFormType>();
-  const [userLocation, setUserLocation] = useState<[number, number]>([35.6892, 51.389]); // default tehran
+  const [userLocation, setUserLocation] = useState<[number, number]>([
+    35.6892, 51.389,
+  ]); // default tehran
   const [loading, setLoading] = useState<boolean>(false);
-//   const map = useMap();
-
-
-  const locateUser = () => {
-    if (!navigator.geolocation) {
-      alert("مرورگر شما از موقعیت‌یابی پشتیبانی نمی‌کند!");
-      return;
-    }
-
-    setLoading(true);
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setUserLocation([latitude, longitude]);
-        setLoading(false);
-      },
-      () => {
-        alert("نمی‌توان موقعیت شما را دریافت کرد!");
-        setLoading(false);
-      }
-    );
-  };
 
 
   const onSubmit = async (data: LocationFormType) => {
@@ -66,24 +75,16 @@ export default function GoogleMapWithLeaflet() {
         <MapContainer
           center={userLocation}
           zoom={12}
-          className="h-[500px] w-full mt-6 rounded-lg shadow-lg overflow-hidden z-0"
+          className="h-[500px] w-full mt-6 rounded-lg shadow-lg overflow-hidden z-0 relative"
         >
           <TileLayer
             url="http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
             subdomains={["mt0", "mt1", "mt2", "mt3"]}
           />
           <Marker position={userLocation} icon={customIcon} />
+          <LocateButton setPosition={setUserLocation} />
         </MapContainer>
-        <button
-          onClick={locateUser}
-          className="absolute bottom-4 left-4 bg-white p-3 rounded-full shadow-md border border-gray-300 hover:bg-gray-100 transition-all duration-300 flex items-center justify-center"
-        >
-          {loading ? (
-            <span className="animate-spin h-5 w-5 border-t-2 border-gray-600 rounded-full"></span>
-          ) : (
-            <FaCrosshairs className="text-gray-700 text-xl" />
-          )}
-        </button>
+       
       </div>
 
       {/* فرم ورودی */}
