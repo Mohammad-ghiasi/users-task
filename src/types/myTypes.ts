@@ -77,3 +77,10 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   className?: string;
   isLoading?: boolean
 }
+
+
+
+// map Types
+export type locationFormType = {
+  location: string
+}

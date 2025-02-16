@@ -87,7 +87,7 @@ export default function Header() {
               <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2">
                 <Link
                   href="/adduser"
-                  className="block px-4 py-2 hover:bg-gray-100 flex items-center"
+                  className="px-4 py-2 hover:bg-gray-100 flex items-center"
                 >
                   <FaUserPlus className="mr-2 text-[#2d6a4f]" />
                   Add User
