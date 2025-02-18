@@ -9,8 +9,8 @@ export default function Button({ children, className = "", isLoading, ...props }
   return (
     <button
       className={clsx(
-        "relative", // برای جایگذاری اسپینر
-        !useOnlyCustomStyles && "px-4 py-2 cursor-pointer rounded-lg flex items-center justify-center active:scale-95 transition-all",
+        "transition-all active:scale-95", // برای جایگذاری اسپینر
+        !useOnlyCustomStyles && "px-4 py-2 cursor-pointer rounded-lg flex items-center justify-center relative",
         !useOnlyCustomStyles && !hasCustomColor && "bg-[#499276] hover:bg-[#2d6a4f] text-white",
         className.replace("myownstyle", "").trim(), // حذف "myownstyle" از کلاس نهایی
         isLoading && "opacity-60 cursor-not-allowed" // تغییر استایل وقتی داره لود میشه

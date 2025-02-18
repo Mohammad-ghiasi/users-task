@@ -48,10 +48,10 @@ export default function Header() {
   };
 
   return (
-    <nav className="bg-white/80 backdrop-blur-md shadow-md fixed top-0 left-0 right-0 px-6 py-3 md:px-10 flex justify-between items-center text-gray-700 font-semibold z-50">
+    <nav className="bg-white/80 backdrop-blur-md shadow-md fixed top-0 left-0 right-0 px-3  py-3 md:px-10 flex justify-between items-center text-gray-700 font-semibold z-50">
       {/* Logo */}
-      <Link href="/" className="text-[#2d6a4f] flex items-center">
-        <MdAdminPanelSettings className=" text-[#4A7C59] text-3xl md:text-[40px]" />
+      <Link href="/" className="text-[#499276] flex items-center">
+        <MdAdminPanelSettings className=" text-[#499276] text-3xl md:text-[40px]" />
         <span className="text-sm md:text-xl font-bold">User Manager</span>
       </Link>
 
@@ -77,10 +77,10 @@ export default function Header() {
           <div className="relative">
             <Button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="rounded-3xl"
+              className="rounded-[45px]"
             >
-              <FaUserPlus />
-              Account
+              <FaUserPlus className="me-1 text-[14px] md:text-[15px]" />
+              <span className="text-sm md:text-[15px]">Account</span>
             </Button>
 
             {menuOpen && (
@@ -89,11 +89,11 @@ export default function Header() {
                   href="/adduser"
                   className="px-4 py-2 hover:bg-gray-100 flex items-center"
                 >
-                  <FaUserPlus className="mr-2 text-[#2d6a4f]" />
+                  <FaUserPlus className="mr-2 text-[#499276]" />
                   Add User
                 </Link>
                 <Button
-                 onClick={handleLogout}
+                  onClick={handleLogout}
                   className="ownstyle w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 flex items-center"
                 >
                   <FaSignOutAlt className="mr-2" />
@@ -105,7 +105,7 @@ export default function Header() {
         ) : (
           <Link
             href="/login"
-            className="bg-[#6a9c89] text-white px-4 py-2 rounded-full flex items-center space-x-2 hover:bg-[#2d6a4f] transition-all"
+            className="bg-[#499276] text-white px-4 py-2 rounded-full flex items-center space-x-2 transition-all"
           >
             <FaSignInAlt />
             <span>Login</span>
@@ -123,7 +123,7 @@ function NavLink({ href, label, active, icon }: any) {
       href={href}
       className={`flex items-center space-x-2 ${
         active
-          ? "text-[#2d6a4f] font-bold border-b-2 border-[#2d6a4f]"
+          ? "text-[#499276] font-bold border-b-2 border-[#2d6a4f]"
           : "hover:text-gray-500"
       }`}
     >

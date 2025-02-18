@@ -67,20 +67,43 @@ export interface EditModalProps {
   onClose: () => void;
 }
 
-
-
 // UI types
 
-//btn type
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
-  className?: string;
-  isLoading?: boolean
+export interface Address {
+  _id: string;
+  addressName: string;
+  address: string;
 }
 
+export interface AddressItemProps {
+  address: Address;
+  isOwn: boolean;
+  deleteAddress: (id: string) => void; // مشخص کردن تایپ ورودی
+}
 
+export interface EditAddressProps {
+  isOpen: boolean;
+  onClose: () => void;
+  address: Address;
+}
+
+export interface AddressItemProps {
+  address: Address;
+  isOwn: boolean;
+  deleteAddress: (id: string) => void; // مشخص کردن تایپ ورودی
+}
+
+//btn type
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+  className?: string;
+  isLoading?: boolean;
+}
 
 // map Types
 export type locationFormType = {
-  location: string
-}
+  addressName: string;
+  address: string
+};
+export type locationPositionType = [number, number];

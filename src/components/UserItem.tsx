@@ -37,23 +37,26 @@ export default function UserItem({
           </div>
 
           {/* User Information */}
-          <div className="flex-grow mt-6 sm:mt-0">
-            <Link href={`/users/${user._id}`} className="block">
-              <p className="text-xl sm:text-2xl font-semibold text-gray-900 hover:text-[#2d6a4f] transition-colors">
+          <div className="flex-grow mt-6 sm:mt-0 ">
+            <Link href={`/users/${user._id}`}>
+              <p className="text-xl sm:max-md:text-cente sm:text-2xl font-semibold text-gray-900 hover:text-[#2d6a4f] transition-colors">
                 {`${user.firstname} ${user.lastname}`}
               </p>
-              <p className="text-sm sm:text-lg text-gray-600 flex items-center justify-center sm:justify-start mt-2">
-                <FaEnvelopeOpenText className="mr-3 text-[#2d6a4f] text-xl" />
-                {user.email}
-              </p>
-              <p className="text-sm sm:text-lg text-gray-600 flex items-center justify-center sm:justify-start mt-2">
-                <MdWork className="mr-3 text-[#2d6a4f] text-xl" />
-                {user.job}
-              </p>
-              <p className="text-sm sm:text-lg text-gray-600 flex items-center justify-center sm:justify-start mt-2">
-                <MdOutlineDateRange className="mr-3 text-[#2d6a4f] text-xl" />
-                Joined: {new Date(user.createdAt).toLocaleDateString()}
-              </p>
+
+              <div className="flex flex-col items-start space-y-2">
+                <p className="text-sm sm:text-lg text-gray-600 flex items-center justify-center sm:justify-start mt-2">
+                  <FaEnvelopeOpenText className="mr-3 text-[#2d6a4f] text-xl" />
+                  {user.email}
+                </p>
+                <p className="text-sm sm:text-lg text-gray-600 flex items-center justify-center sm:justify-start mt-2">
+                  <MdWork className="mr-3 text-[#2d6a4f] text-xl" />
+                  {user.job}
+                </p>
+                <p className="text-sm sm:text-lg text-gray-600 flex items-center justify-center sm:justify-start mt-2">
+                  <MdOutlineDateRange className="mr-3 text-[#2d6a4f] text-xl" />
+                  Joined: {new Date(user.createdAt).toLocaleDateString()}
+                </p>
+              </div>
             </Link>
           </div>
 

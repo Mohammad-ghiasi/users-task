@@ -75,7 +75,7 @@ export default function UserPage() {
 
       <div className="space-y-6">
         {data?.users?.map((user: User) => (
-          <UserItem key={user._id} user={user} hashedId={hashedId?.slice(-6)}/>
+          <UserItem key={user._id} user={user} hashedId={hashedId}/>
         ))}
       </div>
       {!lastPage && (
