@@ -5,37 +5,39 @@ import { useMap } from "react-leaflet";
 import { useState } from "react";
 
 const LocateButton = ({
-  setPosition,
+  setMapCenter,
 }: {
-  setPosition: (pos: [number, number]) => void;
+  setMapCenter: (pos: [number, number]) => void;
 }) => {
   const map = useMap();
   const [loading, setLoading] = useState<boolean>(false);
+
   const locateUser = () => {
     if (!navigator.geolocation) {
       alert("مرورگر شما از موقعیت‌یابی پشتیبانی نمی‌کند!");
       return;
     }
-    setLoading(true),
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setPosition([latitude, longitude]); // تنظیم موقعیت جدید
-          map.setView([latitude, longitude], map.getZoom()); // تغییر مرکز نقشه
-          setLoading(false);
-        },
-        () => {
-          setLoading(false);
-          toast.error("Fail to find position!", {
-            position: "top-center",
-          });
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0,
-        }
-      );
+
+    setLoading(true);
+    navigator.geolocation.watchPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setMapCenter([latitude, longitude]); // مرکز نقشه را تغییر بده
+        map.setView([latitude, longitude], map.getZoom()); // نقشه رو به مرکز جدید ببره
+        setLoading(false);
+      },
+      () => {
+        setLoading(false);
+        toast.error("Fail to find position!", {
+          position: "top-center",
+        });
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    );
   };
 
   return (
