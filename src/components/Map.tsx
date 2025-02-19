@@ -43,7 +43,7 @@ export default function GoogleMapWithLeaflet() {
       <div className="relative">
         <MapContainer
           center={mapCenter}
-          zoom={12}
+          zoom={20}
           className="h-[400px] md:h-[500px] w-full mt-10 rounded-lg shadow-lg overflow-hidden z-0 relative border"
         >
           <TileLayer
