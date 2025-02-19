@@ -47,7 +47,7 @@ export default function AddAddressForm({
         console.log("added");
         cashDeleter();
         reset();
-        setTimeout(() => router.back(), 500);
+        setTimeout(() => router.back(), 1000);
       }
       console.log(data);
     } catch (error) {
