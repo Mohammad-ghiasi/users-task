@@ -2,7 +2,6 @@ import AddressManager from "@/components/address/AddressManage";
 import { propParams } from "@/types/myTypes";
 import api from "@/utils/api";
 import { cashDeleter } from "@/utils/cashDeleter";
-import { revalidatePath } from "next/cache";
 import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 import { cookies } from "next/headers";
 import { FaEnvelopeOpenText } from "react-icons/fa";
@@ -51,13 +50,13 @@ export default async function Page(props: propParams) {
             </p>
           </div>
         </div>
-      <AddressManager
-        userId={data.user._id}
-        initialAddresses={data.user.addresses}
-        hashedId={userHashedId}
-        token={token}
-        cashDeleter={cashDeleter}
-      />
+        <AddressManager
+          userId={data.user._id}
+          initialAddresses={data.user.addresses}
+          hashedId={userHashedId}
+          token={token}
+          cashDeleter={cashDeleter}
+        />
       </div>
     </div>
   );

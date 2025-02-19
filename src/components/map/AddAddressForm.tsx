@@ -1,5 +1,5 @@
 "use client";
-import { FaAddressBook, FaAddressCard, FaPlus } from "react-icons/fa";
+import { FaAddressBook } from "react-icons/fa";
 import Button from "../UI/Button";
 import { useForm } from "react-hook-form";
 import { locationFormType } from "@/types/myTypes";
@@ -8,6 +8,8 @@ import api from "@/utils/api";
 import Cookies from "js-cookie";
 import { cashDeleter } from "@/utils/cashDeleter";
 import { useRouter } from "next/navigation";
+import InputField from "../UI/Input";
+import { FaLocationDot } from "react-icons/fa6";
 
 export default function AddAddressForm({
   defaulValue,
@@ -57,54 +59,26 @@ export default function AddAddressForm({
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col space-y-4 "
     >
-      <div className="flex flex-col justify-center relative">
-        <FaAddressBook className="absolute left-3 top-3 text-gray-400 text-[16px]" />
-        <input
-          {...register("addressName", {
-            required: "Location is required!",
-            minLength: {
-              value: 3,
-              message: "At least 3 characters required!",
-            },
-            maxLength: { value: 255, message: "Too long!" },
-          })}
-          type="text"
-          placeholder="Enter addressName..."
-          className={`pl-10 border rounded-lg px-3 py-2 focus:outline-none focus:ring-1 shadow ${
-            errors.addressName
-              ? "border-red-500 focus:ring-red-500"
-              : "focus:ring-green-500"
-          } `}
-        />
-        {errors.address && (
-          <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>
-        )}
-      </div>
-
-      <div className="flex flex-col justify-center relative">
-        <FaAddressBook className="absolute left-3 top-3 text-gray-400 text-[16px]" />
-        <input
-          {...register("address", {
-            required: "address is required!",
-            minLength: {
-              value: 3,
-              message: "At least 3 characters required!",
-            },
-            maxLength: { value: 255, message: "Too long!" },
-          })}
-          type="text"
-          placeholder="Enter address..."
-          className={`pl-10 border rounded-lg px-3 py-2 focus:outline-none focus:ring-1 shadow ${
-            errors.address
-              ? "border-red-500 focus:ring-red-500"
-              : "focus:ring-green-500"
-          } `}
-        />
-        {errors.address && (
-          <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>
-        )}
-      </div>
-
+      <InputField
+        placeholder="Enter address title..."
+        icon={<FaAddressBook />}
+        register={register("addressName", {
+          required: "Location is required!",
+          minLength: { value: 3, message: "At least 3 characters required!" },
+          maxLength: { value: 255, message: "Too long!" },
+        })}
+        error={errors.addressName?.message}
+      />
+      <InputField
+        placeholder="Enter address title..."
+        icon={<FaLocationDot />}
+        register={register("address", {
+          required: "address is required!",
+          minLength: { value: 10, message: "At least 10 characters required!" },
+          maxLength: { value: 255, message: "Too long!" },
+        })}
+        error={errors.address?.message}
+      />
       <Button
         type="submit"
         isLoading={isSubmitting || loading}

@@ -11,6 +11,7 @@ import { ILoginForm } from "@/types/myTypes";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import Button from "@/components/UI/Button";
 import { useState } from "react";
+import InputField from "@/components/UI/Input";
 
 const LoginForm = () => {
   const triggerToast = useCustomToast();
@@ -23,20 +24,20 @@ const LoginForm = () => {
 
   const onSubmit: SubmitHandler<ILoginForm> = async (data: ILoginForm) => {
     try {
-      setLoading(true)
-      const res = await api.post("/users/login", data);     
+      setLoading(true);
+      const res = await api.post("/users/login", data);
 
       if (res.data?.token) {
         Cookies.set("token", res.data.token, { expires: 7 });
         Cookies.set("hashedId", res.data.userIdHash, { expires: 7 });
-        setLoading(false)
+        setLoading(false);
         window.location.href = "/users";
       } else {
         triggerToast({
           title: "Unexpected error: Token not found.",
           status: "error",
         });
-        setLoading(false)
+        setLoading(false);
       }
     } catch (error: any) {
       triggerToast({
@@ -44,7 +45,7 @@ const LoginForm = () => {
           error.response?.data?.message || "Login failed. Please try again.",
         status: "error",
       });
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -55,38 +56,25 @@ const LoginForm = () => {
       </h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Email */}
-        <div className="relative">
-          <FaEnvelope className="absolute left-3 top-3 text-gray-400" />
-          <input
-            type="email"
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                message: "Please enter a valid email",
-              },
-            })}
-            placeholder="Email"
-            className="w-full pl-10 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-          {errors.email && (
-            <p className="text-red-500 text-sm">{errors.email.message}</p>
-          )}
-        </div>
-
+        <InputField
+          placeholder="Email"
+          icon={<FaEnvelope />}
+          register={register("email", {
+            required: "Email is required",
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+              message: "Please enter a valid email",
+            },
+          })}
+          error={errors.email?.message}
+        />
         {/* Password */}
-        <div className="relative">
-          <FaLock className="absolute left-3 top-3 text-gray-400" />
-          <input
-            type="password"
-            {...register("password", { required: "Password is required" })}
-            placeholder="Password"
-            className="w-full pl-10 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-          {errors.password && (
-            <p className="text-red-500 text-sm">{errors.password.message}</p>
-          )}
-        </div>
+        <InputField
+          placeholder="Password"
+          icon={<FaLock />}
+          register={register("password", { required: "Password is required" })}
+          error={errors.password?.message}
+        />
 
         {/* Submit Button */}
         <Button type="submit" className="w-full shadow-md" isLoading={loading}>

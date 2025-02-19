@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   FaSave,
   FaTimes,
@@ -13,26 +13,17 @@ import Cookies from "js-cookie";
 import { mutate } from "swr";
 import { toast, ToastContainer } from "react-toastify";
 import Button from "./UI/Button";
+import InputField from "./UI/Input";
 
 export default function EditModal({ user, isOpen, onClose }: EditModalProps) {
   const token = Cookies.get("token");
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<User>({ defaultValues: user });
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Set default values when modal opens
-  useEffect(() => {
-    if (isOpen) {
-      setValue("firstname", user.firstname);
-      setValue("lastname", user.lastname);
-      setValue("email", user.email);
-      setValue("job", user.job);
-    }
-  }, [isOpen, user, setValue]);
 
   const handleSave = async (updatedUser: User) => {
     try {
@@ -54,9 +45,6 @@ export default function EditModal({ user, isOpen, onClose }: EditModalProps) {
             },
             false
           );
-          toast.success("User updated successfully!", {
-            position: "top-center",
-          });
           setLoading(false);
           onClose();
         })
@@ -94,95 +82,43 @@ export default function EditModal({ user, isOpen, onClose }: EditModalProps) {
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="mt-5 space-y-4">
             {/* First Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-600">
-                First Name
-              </label>
-              <div className="flex items-center border border-gray-300 rounded-lg p-2">
-                <FaUser className="text-gray-400 mr-2" />
-                <input
-                  type="text"
-                  {...register("firstname", {
-                    required: "First name is required",
-                  })}
-                  className="w-full focus:outline-none"
-                />
-              </div>
-              {errors.firstname && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.firstname.message}
-                </p>
-              )}
-            </div>
-
+            <InputField
+              placeholder="First Name"
+              icon={<FaUser />}
+              register={register("firstname", {
+                required: "First name is required",
+              })}
+              error={errors.firstname?.message}
+            />
             {/* Last Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-600">
-                Last Name
-              </label>
-              <div className="flex items-center border border-gray-300 rounded-lg p-2">
-                <FaUser className="text-gray-400 mr-2" />
-                <input
-                  type="text"
-                  {...register("lastname", {
-                    required: "Last name is required",
-                  })}
-                  className="w-full focus:outline-none"
-                />
-              </div>
-              {errors.lastname && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.lastname.message}
-                </p>
-              )}
-            </div>
-
+            <InputField
+              placeholder="Last Name"
+              icon={<FaUser />}
+              register={register("lastname", {
+                required: "Last name is required",
+              })}
+              error={errors.lastname?.message}
+            />
             {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-gray-600">
-                Email
-              </label>
-              <div className="flex items-center border border-gray-300 rounded-lg p-2">
-                <FaEnvelope className="text-gray-400 mr-2" />
-                <input
-                  type="email"
-                  {...register("email", {
-                    required: "Email is required",
-                    pattern: {
-                      value: /^[^@]+@[^@]+\.[^@]+$/,
-                      message: "Invalid email format",
-                    },
-                  })}
-                  className="w-full focus:outline-none"
-                />
-              </div>
-              {errors.email && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-
+            <InputField
+              placeholder="Email"
+              icon={<FaEnvelope />}
+              register={register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^\S+@\S+\.\S+$/,
+                  message: "Invalid email format",
+                },
+              })}
+              error={errors.email?.message}
+            />
             {/* Job */}
-            <div>
-              <label className="block text-sm font-medium text-gray-600">
-                Job
-              </label>
-              <div className="flex items-center border border-gray-300 rounded-lg p-2">
-                <FaBriefcase className="text-gray-400 mr-2" />
-                <input
-                  type="text"
-                  {...register("job", { required: "Job is required" })}
-                  className="w-full focus:outline-none"
-                />
-              </div>
-              {errors.job && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.job.message}
-                </p>
-              )}
-            </div>
-
+            <InputField
+              placeholder="Job"
+              icon={<FaBriefcase />}
+              register={register("job", { required: "Job is required" })}
+              error={errors.job?.message}
+            />
             {/* Buttons */}
             <div className="flex justify-end space-x-3 mt-4">
               <Button
@@ -204,3 +140,4 @@ export default function EditModal({ user, isOpen, onClose }: EditModalProps) {
     )
   );
 }
+// 207

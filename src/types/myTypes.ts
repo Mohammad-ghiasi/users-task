@@ -1,3 +1,4 @@
+import { UseFormRegisterReturn } from "react-hook-form";
 import { ToastOptions } from "react-toastify";
 
 //react query types
@@ -100,6 +101,16 @@ export interface ButtonProps
   className?: string;
   isLoading?: boolean;
 }
+
+// input types 
+export interface InputFieldProps {
+  placeholder?: string;
+  icon?: JSX.Element;
+  register: UseFormRegisterReturn;
+  error?: string;
+  type?: string;
+  className?: string;
+};
 
 // map Types
 export type locationFormType = {

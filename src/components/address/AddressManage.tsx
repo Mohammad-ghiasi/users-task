@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { BiMap } from "react-icons/bi";
 import { MdAddLocationAlt } from "react-icons/md";
 import Button from "../UI/Button";
 import Link from "next/link";
 import api from "@/utils/api";
-import AddressItem from "../AddressItem";
+import AddressItem from "../AddUsersItem";
 import { Address } from "@/types/myTypes";
+import { FaLocationDot } from "react-icons/fa6";
 
 
 
@@ -46,9 +46,9 @@ export default function AddressManager({
   return (
     <>
       <div className="max-w-2xl  mt-10">
-        <h2 className="text-lg md:text-2xl font-bold text-[#499276] flex items-center gap-2">
-          <BiMap className="text-2xl md:text-3xl" />
-          Manage Addresses
+        <h2 className="text-lg md:text-2xl font-bold text-[#499276] flex items-center justify-center gap-1">
+          <FaLocationDot className="text-2xl md:text-3xl" />
+          {isOwn ? "Manage Addresses" : "Addresses"}
         </h2>
 
         {/* Address List */}

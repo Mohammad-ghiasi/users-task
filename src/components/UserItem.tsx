@@ -1,10 +1,11 @@
+"use client"
 import { useState } from "react";
-import { FaEnvelopeOpenText, FaUserEdit } from "react-icons/fa";
+import { FaCalendarAlt, FaEnvelopeOpenText, FaUserEdit } from "react-icons/fa";
 import EditModal from "@/components/EditModal";
 import Link from "next/link";
 import { User } from "@/types/myTypes";
 import RemoveUser from "./RemoveUser";
-import { MdOutlineDateRange, MdWork } from "react-icons/md";
+import { MdWork } from "react-icons/md";
 import Button from "./UI/Button";
 
 export default function UserItem({
@@ -53,7 +54,7 @@ export default function UserItem({
                   {user.job}
                 </p>
                 <p className="text-sm sm:text-lg text-gray-600 flex items-center justify-center sm:justify-start mt-2">
-                  <MdOutlineDateRange className="mr-3 text-[#2d6a4f] text-xl" />
+                  <FaCalendarAlt className="mr-3 text-[#2d6a4f] text-xl" />
                   Joined: {new Date(user.createdAt).toLocaleDateString()}
                 </p>
               </div>

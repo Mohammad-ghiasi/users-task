@@ -1,14 +1,15 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { MdClose } from "react-icons/md";
-import { FaEdit, FaSave } from "react-icons/fa";
+import { FaAddressBook, FaEdit, FaSave, FaTimes, FaUser } from "react-icons/fa";
 import api from "@/utils/api";
 import { cashDeleter } from "@/utils/cashDeleter";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import Button from "./UI/Button";
 import { EditAddressProps } from "@/types/myTypes";
-
+import InputField from "./UI/Input";
+import { FaLocationDot } from "react-icons/fa6";
 
 export default function ModalEditAddress({
   isOpen,
@@ -53,65 +54,45 @@ export default function ModalEditAddress({
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm z-50">
       <div className="bg-white backdrop-blur-md shadow-xl shadow-gray-300 border rounded-xl p-6 w-full max-w-md animate-fadeIn">
-        {/* دکمه بستن */}
-        <button
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
-          onClick={onClose}
-        >
-          <MdClose size={24} />
-        </button>
+        {/* close btn*/}
+        <div className="flex justify-between items-center mb-5">
+          <h2 className="text-xl font-semibold text-gray-800">Edit User</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-800 transition-all"
+          >
+            <FaTimes size={18} />
+          </button>
+        </div>
 
-        {/* عنوان */}
-        <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2 mb-4">
-          <FaEdit /> Edit Address
-        </h2>
-
-        {/* فرم ویرایش آدرس */}
+        {/* edite address form */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col space-y-4"
         >
-          {/* نام آدرس */}
-          <div className="relative">
-            <input
-              {...register("addressName", {
-                required: "Name is required!",
-                minLength: 3,
-              })}
-              type="text"
-              placeholder="Address Name"
-              className={`w-full p-2 border rounded ${
-                errors.addressName ? "border-red-500" : "border-gray-300"
-              }`}
-            />
-            {errors.addressName && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.addressName.message}
-              </p>
-            )}
-          </div>
+          {/* address title */}
 
-          {/* آدرس */}
-          <div className="relative">
-            <input
-              {...register("address", {
-                required: "Address is required!",
-                minLength: 5,
-              })}
-              type="text"
-              placeholder="Address"
-              className={`w-full p-2 border rounded ${
-                errors.address ? "border-red-500" : "border-gray-300"
-              }`}
-            />
-            {errors.address && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.address.message}
-              </p>
-            )}
-          </div>
+          <InputField
+            placeholder="Address Title"
+            icon={<FaAddressBook />}
+            register={register("addressName", {
+              required: "Name is required!",
+              minLength: 3,
+            })}
+            error={errors.addressName?.message}
+          />
+          {/* address */}
+          <InputField
+            placeholder="Address"
+            icon={<FaLocationDot />}
+            register={register("address", {
+              required: "Address is required!",
+              minLength: 5,
+            })}
+            error={errors.address?.message}
+          />
 
-          {/* دکمه‌ها */}
+          {/* actions */}
           <div className="flex justify-end space-x-3">
             <Button
               type="button"
@@ -120,11 +101,10 @@ export default function ModalEditAddress({
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" isLoading={isSubmitting}>
               <FaSave className="mr-2" />
-              {isSubmitting ? "Saving..." : "Save"}
+              Save
             </Button>
-           
           </div>
         </form>
       </div>
