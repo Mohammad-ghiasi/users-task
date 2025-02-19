@@ -19,7 +19,7 @@ const LocateButton = ({
     }
 
     setLoading(true);
-    navigator.geolocation.watchPosition(
+    navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
         setMapCenter([latitude, longitude]); // مرکز نقشه را تغییر بده
