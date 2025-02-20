@@ -11,7 +11,7 @@ export default function RemoveUser({ id }: { id: string }) {
   const userRemover = async (userId: string) => {
     try {
       await api
-        .delete(`/users/delete/${id}`, {
+        .delete(`/users/deleteuser/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

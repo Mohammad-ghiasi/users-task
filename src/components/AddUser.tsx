@@ -23,6 +23,8 @@ export default function AddUser({ redirect }: addUserProp) {
   const onSubmit: SubmitHandler<ISignupForm> = async (data) => {
     try {
       setLoading(true);
+      console.log(data);
+      
       const res = await api.post("/users/signup", data);
       if (res.status === 201) {
         if (res.data.token) {
@@ -32,10 +34,11 @@ export default function AddUser({ redirect }: addUserProp) {
           "users",
           (prevdata: any) => ({
             ...prevdata,
-            users: [...prevdata.users, res.data.createdNewUser],
+            users: [...(prevdata?.users || []), res.data?.createdNewUser],
           }),
           false
         );
+        
 
         toast.success("Account created successfully!", {
           position: "top-center",
@@ -92,7 +95,7 @@ export default function AddUser({ redirect }: addUserProp) {
         />
         {/* Password */}
         <InputField
-          placeholder="Last Name"
+          placeholder="Password"
           icon={<FaLock />}
           register={register("password", {
             required: "Password is required",
@@ -102,7 +105,7 @@ export default function AddUser({ redirect }: addUserProp) {
         />
         {/* Job */}
         <InputField
-          placeholder="Last Name"
+          placeholder="Job"
           icon={<FaBriefcase />}
           register={register("job", { required: "Job is required" })}
           error={errors.job?.message}

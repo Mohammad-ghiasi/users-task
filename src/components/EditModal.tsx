@@ -29,7 +29,7 @@ export default function EditModal({ user, isOpen, onClose }: EditModalProps) {
     try {
       setLoading(true);
       await api
-        .put(`/users/updateUsers/${updatedUser._id}`, updatedUser, {
+        .put(`/users/updateuser/${updatedUser._id}`, updatedUser, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {

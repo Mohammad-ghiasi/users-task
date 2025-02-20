@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import {
@@ -16,6 +16,7 @@ import { MdAdminPanelSettings } from "react-icons/md";
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter()
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -42,9 +43,12 @@ export default function Header() {
   }, [menuOpen]);
 
   const handleLogout = () => {
-    Cookies.remove("token");
-    setIsLoggedIn(false);
-    window.location.reload();
+    router.push("/")
+    setTimeout(() => {
+      Cookies.remove("token");
+      setIsLoggedIn(false);
+      window.location.reload();
+    }, 1000)
   };
 
   return (

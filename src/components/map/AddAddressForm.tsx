@@ -32,7 +32,6 @@ export default function AddAddressForm({
   });
 
   const onSubmit = async (data: locationFormType) => {
-    console.log("User Input:", data.addressName);
     try {
       const response = await api.post(
         "/address/newaddress",
@@ -44,12 +43,10 @@ export default function AddAddressForm({
         }
       );
       if (response.status == 201) {
-        console.log("added");
         cashDeleter();
         reset();
         setTimeout(() => router.back(), 1000);
       }
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
