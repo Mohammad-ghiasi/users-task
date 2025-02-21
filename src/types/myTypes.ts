@@ -69,12 +69,18 @@ export interface EditModalProps {
 }
 
 // UI types
+export type pageType = number | string;
 
 export interface Address {
   _id: string;
   addressName: string;
   address: string;
 }
+
+export type menuPropType = {
+  menuOpen: boolean;
+  setMenuOpen: (value: boolean) => void;
+};
 
 export interface AddressItemProps {
   address: Address;

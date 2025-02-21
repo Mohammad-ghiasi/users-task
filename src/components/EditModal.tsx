@@ -41,6 +41,7 @@ export default function EditModal({ user, isOpen, onClose }: EditModalProps) {
                   ? res.data.updatedUser
                   : user
               );
+              
               return { ...prevdata, users: [...updates] };
             },
             false
