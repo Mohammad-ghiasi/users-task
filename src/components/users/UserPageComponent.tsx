@@ -1,16 +1,20 @@
 "use client";
 
 import Footer from "@/components/Footer";
-import UserItem from "@/components/UserItem";
 import Cookies from "js-cookie";
 import { useCallback, useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
-import { pageType, User, UserResponse } from "@/types/myTypes";
-import api from "@/utils/api";
+import { User, UserResponse } from "@/types/myTypes";
 import useSWR, { mutate } from "swr";
 import Button from "@/components/UI/Button";
 import { fetcher } from "@/utils/fetcher";
+import dynamic from "next/dynamic";
+import SkeletonUserItem from "../SkeletonUserItem";
 
+const UserItem = dynamic(() => import("@/components/UserItem"), {
+  ssr: false,
+  loading: () => <SkeletonUserItem />,
+});
 
 
 // Get token from cookies
