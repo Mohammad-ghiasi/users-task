@@ -6,12 +6,12 @@ import Button from "./UI/Button";
 import dynamic from "next/dynamic";
 import Avatar from "./UI/Avatar";
 import UserInfo from "./users/UserInfo";
-import RemoveUser from "./RemoveUser";
-import EditModal from "./EditModal";
-// const EditModal = dynamic(() => import("@/components/EditModal"), {
-//   ssr: false,
-// });
-// const RemoveUser = dynamic(() => import("./RemoveUser"), { ssr: false });
+// import RemoveUser from "./RemoveUser";
+// import EditModal from "./EditModal";
+const EditModal = dynamic(() => import("@/components/EditModal"), {
+  ssr: false,
+});
+const RemoveUser = dynamic(() => import("./RemoveUser"), { ssr: false });
 // const Avatar = dynamic(() => import("./UI/Avatar"), { ssr: true });
 // const UserInfo = dynamic(() => import("./users/UserInfo"), { ssr: true });
 
