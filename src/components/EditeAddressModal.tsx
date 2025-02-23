@@ -1,15 +1,15 @@
 "use client";
 import { useForm } from "react-hook-form";
-import { MdClose } from "react-icons/md";
-import { FaAddressBook, FaEdit, FaSave, FaTimes, FaUser } from "react-icons/fa";
+import { FaAddressBook, FaSave, FaTimes } from "react-icons/fa";
 import api from "@/utils/api";
 import { cashDeleter } from "@/utils/cashDeleter";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import Button from "./UI/Button";
 import { EditAddressProps } from "@/types/myTypes";
-import InputField from "./UI/Input";
 import { FaLocationDot } from "react-icons/fa6";
+import dynamic from "next/dynamic";
+const InputField = dynamic(() => import("./UI/Input"), { ssr: true });
 
 export default function ModalEditAddress({
   isOpen,

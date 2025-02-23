@@ -5,9 +5,12 @@ import { MdAddLocationAlt } from "react-icons/md";
 import Button from "../UI/Button";
 import Link from "next/link";
 import api from "@/utils/api";
-import AddressItem from "../AddUsersItem";
+// import AddressItem from "../AddUsersItem";
 import { Address } from "@/types/myTypes";
 import { FaLocationDot } from "react-icons/fa6";
+import dynamic from "next/dynamic";
+const AddressItem = dynamic(() => import("../AddUsersItem"), { ssr: false });
+
 
 
 

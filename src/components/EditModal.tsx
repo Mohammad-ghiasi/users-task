@@ -13,7 +13,8 @@ import Cookies from "js-cookie";
 import { mutate } from "swr";
 import { toast, ToastContainer } from "react-toastify";
 import Button from "./UI/Button";
-import InputField from "./UI/Input";
+import dynamic from "next/dynamic";
+const InputField = dynamic(() => import("./UI/Input"), { ssr: true });
 
 export default function EditModal({ user, isOpen, onClose }: EditModalProps) {
   const token = Cookies.get("token");

@@ -1,7 +1,9 @@
 import { BiPencil, BiTrash } from "react-icons/bi";
 import { useState } from "react";
-import ModalEditAddress from "./EditeAddressModal";
 import { AddressItemProps } from "@/types/myTypes";
+import dynamic from "next/dynamic";
+const ModalEditAddress = dynamic(() => import("./EditeAddressModal"), { ssr: false });
+
 
 export default function AddressItem({
   address,

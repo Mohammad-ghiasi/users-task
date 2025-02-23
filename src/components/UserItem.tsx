@@ -1,12 +1,14 @@
 "use client"
 import { useState } from "react";
 import { FaCalendarAlt, FaEnvelopeOpenText, FaUserEdit } from "react-icons/fa";
-import EditModal from "@/components/EditModal";
 import Link from "next/link";
 import { User } from "@/types/myTypes";
-import RemoveUser from "./RemoveUser";
+
 import { MdWork } from "react-icons/md";
 import Button from "./UI/Button";
+import dynamic from "next/dynamic";
+const EditModal = dynamic(() => import("@/components/EditModal"), { ssr: false });
+const RemoveUser = dynamic(() => import("./RemoveUser"), { ssr: false });
 
 export default function UserItem({
   user,
@@ -30,7 +32,7 @@ export default function UserItem({
         <div className="flex flex-col sm:flex-row items-center sm:space-x-8 text-center sm:text-left">
           {/* Profile Avatar */}
           <div className="relative">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-[#7BAF97] to-[#4A7C59] text-white flex items-center justify-center text-4xl font-bold shadow-lg">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-[#2E614C] to-[#4A7C59] text-white flex items-center justify-center text-4xl font-bold shadow-lg">
               {user.firstname[0]}
               {user.lastname[0]}
             </div>
@@ -64,10 +66,10 @@ export default function UserItem({
           {/* Action Buttons */}
           <div className="flex flex-row space-x-4 mt-6 sm:mt-0 sm:flex-col items-center justify-center sm:space-y-4 sm:space-x-0">
             <Button
-              className="ownstyle p-3 rounded-full bg-[#6a9c89] hover:bg-[#2d6a4f] transition-all duration-200 text-white shadow-lg hover:scale-110"
+              className="ownstyle p-3 rounded-full bg-[#2E614C]"
               onClick={() => setIsModalOpen(true)}
             >
-              <FaUserEdit className="text-lg" />
+              <FaUserEdit className="text-lg text-white" />
             </Button>
             <RemoveUser id={user._id} />
           </div>

@@ -6,7 +6,7 @@ const NavLink = ({ href, label, active, icon }: any) => {
       href={href}
       className={`flex items-center space-x-2 ${
         active
-          ? "text-[#499276] font-bold"
+          ? "text-[#2E614B] font-bold"
           : "hover:text-gray-500"
       }`}
     >

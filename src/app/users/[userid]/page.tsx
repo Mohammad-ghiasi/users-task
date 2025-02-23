@@ -1,4 +1,3 @@
-import AddressManager from "@/components/address/AddressManage";
 import { propParams } from "@/types/myTypes";
 import api from "@/utils/api";
 import { cashDeleter } from "@/utils/cashDeleter";
@@ -6,6 +5,8 @@ import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adap
 import { cookies } from "next/headers";
 import { FaEnvelopeOpenText } from "react-icons/fa";
 import { MdWork, MdOutlineDateRange } from "react-icons/md";
+import dynamic from "next/dynamic";
+const AddressManager = dynamic(() => import("@/components/address/AddressManage"), { ssr: false });
 
 export default async function Page(props: propParams) {
   const cookieStore: ReadonlyRequestCookies = cookies();

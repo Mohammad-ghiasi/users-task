@@ -12,8 +12,8 @@ export default function Header() {
       {/* Logo */}
       <div className="">
         {" "}
-        <Link href="/" className="text-[#499276] flex items-center">
-          <MdAdminPanelSettings className="text-[#499276] text-3xl md:text-[40px]" />
+        <Link href="/" className="text-[#2E614B] flex items-center">
+          <MdAdminPanelSettings className="text-[#2E614B] text-3xl md:text-[40px]" />
           <span className="text-sm md:text-xl font-bold">User Manager</span>
         </Link>
       </div>

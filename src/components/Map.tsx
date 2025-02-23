@@ -3,12 +3,14 @@
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
-import LocateButton from "./map/LocateButton";
 import { locationPositionType } from "@/types/myTypes";
 import dynamic from "next/dynamic";
 import addressFinder from "@/utils/addressFinder";
 
 const AddAddressForm = dynamic(() => import("./map/AddAddressForm"), {
+  ssr: false,
+});
+const LocateButton = dynamic(() => import("./map/LocateButton"), {
   ssr: false,
 });
 

@@ -1,6 +1,9 @@
-import Footer from "@/components/Footer";
-import Hero from "@/components/Hero";
-import Features from "@/components/Features";
+
+import dynamic from "next/dynamic";
+
+const Hero = dynamic(() => import("@/components/Hero"), { ssr: true });
+const Features = dynamic(() => import("@/components/Features"), { ssr: true });
+const Footer = dynamic(() => import("@/components/Footer"), { ssr: true });
 
 
 export default function HomePage() {
