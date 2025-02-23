@@ -4,12 +4,14 @@ import { FaUserEdit } from "react-icons/fa";
 import { User } from "@/types/myTypes";
 import Button from "./UI/Button";
 import dynamic from "next/dynamic";
+import Avatar from "./UI/Avatar";
+import UserInfo from "./users/UserInfo";
 const EditModal = dynamic(() => import("@/components/EditModal"), {
   ssr: false,
 });
 const RemoveUser = dynamic(() => import("./RemoveUser"), { ssr: false });
-const Avatar = dynamic(() => import("./UI/Avatar"), { ssr: true });
-const UserInfo = dynamic(() => import("./users/UserInfo"), { ssr: true });
+// const Avatar = dynamic(() => import("./UI/Avatar"), { ssr: true });
+// const UserInfo = dynamic(() => import("./users/UserInfo"), { ssr: true });
 
 export default function UserItem({
   user,
