@@ -4,6 +4,7 @@ import { FaCalendarAlt, FaEnvelopeOpenText } from "react-icons/fa";
 import { MdWork } from "react-icons/md";
 import { User } from "@/types/myTypes";
 
+
 export default function UserInfo({userData}: {userData: User}) {
   return (
     <div className="flex-grow mt-6 sm:mt-0 ">
