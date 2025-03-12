@@ -31,7 +31,7 @@ const LoginForm = () => {
         Cookies.set("token", res.data.token, { expires: 7 });
         Cookies.set("hashedId", res.data.userIdHash, { expires: 7 });
         setLoading(false);
-        window.location.href = "/users";
+        // window.location.href = "/users";
       } else {
         triggerToast({
           title: "Unexpected error: Token not found.",
